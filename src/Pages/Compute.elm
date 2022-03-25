@@ -14,6 +14,7 @@ import Html exposing (input, text)
 import Html.Attributes exposing (..)
 import Json.Decode as Decode exposing (Decoder, fail, field, maybe)
 import Json.Decode.Pipeline
+import Layout
 import Page
 import Process
 import Request exposing (Request)
@@ -486,36 +487,35 @@ view : Model -> View Msg
 view model =
     { title = "Compute"
     , body =
-        [ E.layout
-            [ E.width E.fill
-            , F.family [ F.typeface "Fira Code" ]
-            , F.size 12
-            , F.color darkModeFontColor
-            , Background.color darkModeBackgroundColor
-            ]
-            (E.row [ E.centerX, E.width (E.fill |> E.maximum width) ]
-                [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
-                    [ inputRow model
-                    , outputRow model.selectedTab
-                    , let
-                        data =
-                            Dict.toList model.resultsMap
-                                |> List.map Tuple.second
-                                |> filterData model.dataFilter
-                      in
-                      case model.selectedTab of
-                        Chart ->
-                            histogram data
-
-                        Table ->
-                            table data
-
-                        Data ->
-                            dataView data
-                    ]
+        Layout.body
+            [ E.layout
+                [ F.size 12
+                , F.color darkModeFontColor
+                , E.width E.fill
                 ]
-            )
-        ]
+                (E.row []
+                    [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
+                        [ inputRow model
+                        , outputRow model.selectedTab
+                        , let
+                            data =
+                                Dict.toList model.resultsMap
+                                    |> List.map Tuple.second
+                                    |> filterData model.dataFilter
+                          in
+                          case model.selectedTab of
+                            Chart ->
+                                histogram data
+
+                            Table ->
+                                table data
+
+                            Data ->
+                                dataView data
+                        ]
+                    ]
+                )
+            ]
     }
 
 
