@@ -489,11 +489,11 @@ view model =
     , body =
         Layout.body
             [ E.layout
-                [ F.size 12
+                [ F.size 14
                 , F.color darkModeFontColor
                 , E.width E.fill
                 ]
-                (E.row []
+                (E.row [ E.centerX, E.centerY ]
                     [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
                         [ inputRow model
                         , outputRow model.selectedTab

@@ -48,7 +48,7 @@ footer =
             , A.style "text-align" "center"
             , A.style "border-right" "1px solid #21cd06"
             ]
-            [ H.a [ A.href "/compute" ] [ H.text "raw data explorer" ]
+            [ H.a [ A.href "/compute" ] [ H.text "compute explorer" ]
             ]
         , H.span
             [ A.style "padding" "0.5rem"
