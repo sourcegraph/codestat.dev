@@ -44,7 +44,7 @@ header =
                             [ E.paddingEach { top = 0, right = 8, bottom = 0, left = 0 }
                             ]
                             (E.text "▄▆█")
-                        , E.el [] (E.text "codestats.dev")
+                        , E.el [] (E.text "codestat.dev")
                         ]
                 }
             , E.el
@@ -87,7 +87,7 @@ footer =
             , Border.color (E.rgb255 33 205 6)
             , E.paddingXY 8 8
             ]
-            (E.link [ E.centerX ] { url = "/compute", label = E.text "compute explorer" })
+            (E.link [ E.centerX ] { url = "/compute", label = E.text "compute data explorer" })
         , E.el
             [ E.width E.fill
             , Font.center
@@ -95,48 +95,8 @@ footer =
             ]
             (E.row [ E.width E.fill, Font.center, E.centerX, Font.justify ]
                 [ E.el [ E.centerX ] (E.text "feedback / requests? ")
-                , E.link [ E.centerX ] { url = "https://twitter.com/CodeStatsDev", label = E.text "@CodeStatsDev" }
+                , E.link [ E.centerX ] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
                 , E.el [ E.centerX ] (E.text " on Twiter")
                 ]
             )
         ]
-
-
-
--- E.el []
---     (E.html
---         (H.footer
---             [ A.style "display" "flex"
---             , A.style "justify-content" "space-around"
---             , A.style "border-top" "1px solid #21cd06"
---             , A.style "padding-bottom" "1.5rem"
---             ]
---             [ H.span
---                 [ A.style "padding" "0.5rem"
---                 , A.style "flex-grow" "1"
---                 , A.style "text-align" "center"
---                 , A.style "border-right" "1px solid #21cd06"
---                 ]
---                 [ H.text "powered by "
---                 , H.a [ A.href "https://sourcegraph.com" ] [ H.text "Sourcegraph" ]
---                 ]
---             , H.span
---                 [ A.style "padding" "0.5rem"
---                 , A.style "flex-grow" "1"
---                 , A.style "text-align" "center"
---                 , A.style "border-right" "1px solid #21cd06"
---                 ]
---                 [ H.a [ A.href "/compute" ] [ H.text "compute explorer" ]
---                 ]
---             , H.span
---                 [ A.style "padding" "0.5rem"
---                 , A.style "flex-grow" "1"
---                 , A.style "text-align" "center"
---                 ]
---                 [ H.text "feedback/requests? "
---                 , H.a [ A.href "https://twitter.com/CodeStatsDev" ] [ H.text "@CodeStatsDev" ]
---                 , H.text " on Twitter"
---                 ]
---             ]
---         )
---     )
