@@ -50,7 +50,7 @@ header =
             , E.el
                 [ Region.heading 4
                 , Font.size 16
-                , Font.color (E.rgb 1 1 1)
+                , Font.color (E.rgb 0.7 0.7 0.7)
                 , E.paddingXY 0 8
                 ]
                 (E.text "> stats from 2m+ repositories")

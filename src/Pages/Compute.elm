@@ -485,10 +485,10 @@ outputRow selectedTab =
 
 view : Model -> View Msg
 view model =
-    { title = "Compute"
+    { title = "compute data explorer"
     , body =
         Layout.body
-            [ E.row [ E.centerX, E.centerY ]
+            [ E.row [ E.centerX ]
                 [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
                     [ inputRow model
                     , outputRow model.selectedTab
@@ -639,11 +639,6 @@ textResultDecoder =
 
 
 -- STYLING
-
-
-darkModeBackgroundColor : E.Color
-darkModeBackgroundColor =
-    E.rgb255 0x18 0x1B 0x26
 
 
 darkModeFontColor : E.Color
