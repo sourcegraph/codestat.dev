@@ -488,33 +488,27 @@ view model =
     { title = "Compute"
     , body =
         Layout.body
-            [ E.layout
-                [ F.size 14
-                , F.color darkModeFontColor
-                , E.width E.fill
-                ]
-                (E.row [ E.centerX, E.centerY ]
-                    [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
-                        [ inputRow model
-                        , outputRow model.selectedTab
-                        , let
-                            data =
-                                Dict.toList model.resultsMap
-                                    |> List.map Tuple.second
-                                    |> filterData model.dataFilter
-                          in
-                          case model.selectedTab of
-                            Chart ->
-                                histogram data
+            [ E.row [ E.centerX, E.centerY ]
+                [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
+                    [ inputRow model
+                    , outputRow model.selectedTab
+                    , let
+                        data =
+                            Dict.toList model.resultsMap
+                                |> List.map Tuple.second
+                                |> filterData model.dataFilter
+                      in
+                      case model.selectedTab of
+                        Chart ->
+                            histogram data
 
-                            Table ->
-                                table data
+                        Table ->
+                            table data
 
-                            Data ->
-                                dataView data
-                        ]
+                        Data ->
+                            dataView data
                     ]
-                )
+                ]
             ]
     }
 
