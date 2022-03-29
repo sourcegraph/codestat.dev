@@ -9,7 +9,7 @@ module Shared exposing
     , update
     )
 
-import ComputeInput
+import ComputeBackend
 import Json.Decode
 import Json.Decode.Pipeline
 import Request exposing (Request)
@@ -17,7 +17,7 @@ import Request exposing (Request)
 
 type alias ComputeFlags =
     { sourcegraphURL : String
-    , computeInput : Maybe ComputeInput.ComputeInput
+    , computeInput : Maybe ComputeBackend.ComputeInput
     }
 
 
@@ -41,7 +41,7 @@ flagsDecoder : Json.Decode.Decoder ComputeFlags
 flagsDecoder =
     Json.Decode.succeed ComputeFlags
         |> Json.Decode.Pipeline.required "sourcegraphURL" Json.Decode.string
-        |> Json.Decode.Pipeline.required "computeInput" (Json.Decode.nullable ComputeInput.computeInputDecoder)
+        |> Json.Decode.Pipeline.required "computeInput" (Json.Decode.nullable ComputeBackend.computeInputDecoder)
 
 
 
@@ -66,7 +66,7 @@ init _ json =
                     { sourcegraphURL = ""
                     , computeInput =
                         Just
-                            { computeQueries = [ placeholderQuery ]
+                            { computeQueries = []
                             , experimentalOptions = Nothing
                             }
                     }

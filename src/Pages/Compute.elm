@@ -2,7 +2,7 @@ module Pages.Compute exposing (Model, Msg, page)
 
 import Chart as C
 import Chart.Attributes as CA
-import ComputeInput
+import ComputeBackend
 import Dict exposing (Dict)
 import Element as E
 import Element.Background as Background
@@ -121,10 +121,10 @@ init shared =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.batch [ ComputeInput.receiveEvent eventDecoder ]
+    Sub.batch [ ComputeBackend.receiveEvent eventDecoder ]
 
 
-eventDecoder : ComputeInput.RawEvent -> Msg
+eventDecoder : ComputeBackend.RawEvent -> Msg
 eventDecoder event =
     case event.eventType of
         Just "results" ->
@@ -192,7 +192,7 @@ update msg model =
                     updateDataFilter dataFilterMsg model.dataFilter
             in
             ( { model | dataFilter = newDataFilter }
-            , ComputeInput.emitInput
+            , ComputeBackend.emitInput
                 { computeQueries = [ model.query ]
                 , experimentalOptions =
                     Just
@@ -214,7 +214,7 @@ update msg model =
             else
                 ( { model | resultsMap = Dict.empty }
                 , Cmd.batch
-                    [ ComputeInput.emitInput
+                    [ ComputeBackend.emitInput
                         { computeQueries = [ model.query ]
                         , experimentalOptions =
                             Just
@@ -224,7 +224,7 @@ update msg model =
                                 , excludeStopWords = Just model.dataFilter.excludeStopWords
                                 }
                         }
-                    , ComputeInput.openStream
+                    , ComputeBackend.openStream
                         ( Url.Builder.crossOrigin
                             model.sourcegraphURL
                             [ ".api", "compute", "stream" ]

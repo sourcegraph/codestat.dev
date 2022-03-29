@@ -1,4 +1,4 @@
-port module ComputeInput exposing
+port module ComputeBackend exposing
     ( ComputeInput
     , RawEvent
     , computeInputDecoder
