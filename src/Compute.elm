@@ -61,6 +61,7 @@ type alias Model =
     , dataFilter : DataFilter
     , selectedTab : Tab
     , resultsMap : Dict String DataValue
+    , editible : Bool
 
     -- Debug client only
     , serverless : Bool
@@ -95,6 +96,18 @@ init shared =
       , selectedTab = Chart
       , debounce = 0
       , resultsMap = Dict.empty
+      , editible =
+            case shared.flags.computeInput of
+                Just { editible } ->
+                    case editible of
+                        Just some ->
+                            some
+
+                        Nothing ->
+                            True
+
+                Nothing ->
+                    True
       , serverless = False
       }
     , Task.perform identity (Task.succeed RunCompute)
@@ -187,6 +200,7 @@ update msg model =
                         , reverse = Just newDataFilter.reverse
                         , excludeStopWords = Just newDataFilter.excludeStopWords
                         }
+                , editible = Just model.editible
                 }
             )
 
@@ -209,6 +223,7 @@ update msg model =
                                 , reverse = Just model.dataFilter.reverse
                                 , excludeStopWords = Just model.dataFilter.excludeStopWords
                                 }
+                        , editible = Just True
                         }
                     , ComputeBackend.openStream
                         ( Url.Builder.crossOrigin
@@ -473,8 +488,16 @@ view : Model -> E.Element Msg
 view model =
     E.row [ E.centerX ]
         [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
-            [ inputRow model
-            , outputRow model.selectedTab
+            [ if model.editible then
+                inputRow model
+
+              else
+                E.none
+            , if model.editible then
+                outputRow model.selectedTab
+
+              else
+                E.none
             , let
                 data =
                     Dict.toList model.resultsMap

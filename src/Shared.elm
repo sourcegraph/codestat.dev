@@ -68,6 +68,7 @@ init _ json =
                         Just
                             { computeQueries = []
                             , experimentalOptions = Nothing
+                            , editible = Nothing
                             }
                     }
     in

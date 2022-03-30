@@ -1,6 +1,7 @@
 module Pages.S.Chat.Zulip exposing (Model, Msg, init, page, update, view)
 
 import Compute
+import ComputeBackend
 import Element as E
 import Element.Font as Font
 import Element.Region as Region
@@ -34,8 +35,21 @@ page shared req =
 init : Shared.Model -> ( Model, Cmd Msg )
 init shared =
     let
+        flags =
+            shared.flags
+
+        computeInput : ComputeBackend.ComputeInput
+        computeInput =
+            { computeQueries = [ "lang:markdown content:output(https://(\\w+)\\.zulipchat\\.com -> $1) count:9" ]
+            , experimentalOptions = Nothing
+            , editible = Just False
+            }
+
+        mergedFlags =
+            { flags | computeInput = Just computeInput }
+
         ( subModel, subCmd ) =
-            Compute.init shared
+            Compute.init { shared | flags = mergedFlags }
     in
     ( { wordCloud = subModel }, Cmd.map WordCloudMsg subCmd )
 
@@ -56,8 +70,10 @@ view model =
     { title = "Zulip"
     , body =
         Layout.body
-            [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Zulip chat: stats from 2m+ repositories")
-            , E.map WordCloudMsg (Compute.view model.wordCloud)
+            [ E.column [ E.centerX, E.paddingXY 0 64 ]
+                [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Zulip chat: stats from 2m+ repositories")
+                , E.map WordCloudMsg (Compute.view model.wordCloud)
+                ]
             ]
     }
 

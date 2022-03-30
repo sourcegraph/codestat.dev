@@ -38,6 +38,7 @@ port emitInput : ComputeInput -> Cmd msg
 type alias ComputeInput =
     { computeQueries : List String
     , experimentalOptions : Maybe ExperimentalOptions
+    , editible : Maybe Bool
     }
 
 
@@ -58,6 +59,7 @@ computeInputDecoder =
     Decode.succeed ComputeInput
         |> Json.Decode.Pipeline.required "computeQueries" (Decode.list Decode.string)
         |> Json.Decode.Pipeline.optional "experimentalOptions" (Decode.maybe experimentalOptionsDecoder) Nothing
+        |> Json.Decode.Pipeline.optional "editible" (Decode.maybe Decode.bool) Nothing
 
 
 experimentalOptionsDecoder : Decoder ExperimentalOptions
