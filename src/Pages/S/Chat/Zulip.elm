@@ -40,7 +40,7 @@ init shared =
 
         computeInput : ComputeBackend.ComputeInput
         computeInput =
-            { computeQueries = [ "lang:markdown content:output(https://(\\w+)\\.zulipchat\\.com -> $1) count:9" ]
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1:@:$repo) count:1000" ]
             , experimentalOptions = Nothing
             , editible = Just False
             }
