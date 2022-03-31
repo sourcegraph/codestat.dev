@@ -174,9 +174,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnQueryChanged newQuery ->
-            ( { model | query = newQuery, debounce = model.debounce + 1 }
-            , Task.perform (\_ -> OnDebounce) (Process.sleep debounceQueryInputMillis)
-            )
+            Debug.log model.query
+                ( { model | query = newQuery, debounce = model.debounce + 1 }
+                , Task.perform (\_ -> OnDebounce) (Process.sleep debounceQueryInputMillis)
+                )
 
         OnDebounce ->
             if model.debounce - 1 == 0 then
