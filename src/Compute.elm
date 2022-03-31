@@ -247,6 +247,37 @@ update msg model =
             ( model, Cmd.none )
 
 
+parseString : String -> ( String, String )
+parseString s =
+    case String.split ":::" s of
+        name :: groupName :: _ ->
+            ( name, groupName )
+
+        _ ->
+            ( s, s )
+
+
+groupResults : Dict String DataValue -> Dict String DataValue
+groupResults inputDict =
+    let
+        updateValue name v =
+            case v of
+                Nothing ->
+                    Just { name = name, value = 1 }
+
+                Just e ->
+                    Just { e | value = e.value + 1 }
+
+        updateEntry s dict =
+            let
+                ( name, groupName ) =
+                    parseString s
+            in
+            Dict.update name (updateValue name) dict
+    in
+    List.foldl updateEntry Dict.empty (Dict.keys inputDict)
+
+
 updateDataFilter : DataFilterMsg -> DataFilter -> DataFilter
 updateDataFilter msg dataFilter =
     case msg of
@@ -500,7 +531,8 @@ view model =
                 E.none
             , let
                 data =
-                    Dict.toList model.resultsMap
+                    Dict.toList
+                        (groupResults model.resultsMap)
                         |> List.map Tuple.second
                         |> filterData model.dataFilter
               in

@@ -40,8 +40,14 @@ init shared =
 
         computeInput : ComputeBackend.ComputeInput
         computeInput =
-            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1:@:$repo) count:1000" ]
-            , experimentalOptions = Nothing
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1 $repo) count:all" ]
+            , experimentalOptions =
+                Just
+                    { dataPoints = Just 10
+                    , sortByCount = Nothing
+                    , reverse = Nothing
+                    , excludeStopWords = Nothing
+                    }
             , editible = Just False
             }
 
@@ -72,6 +78,7 @@ view model =
         Layout.body
             [ E.column [ E.centerX, E.paddingXY 0 64 ]
                 [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Zulip chat: stats from 2m+ repositories")
+                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] (E.text "Top 10 most-linked Zulip chat groups")
                 , E.map WordCloudMsg (Compute.view model.wordCloud)
                 ]
             ]
