@@ -360,8 +360,8 @@ histogram data =
                     [ CA.spacing 0.0 ]
                     [ C.bar .value [ CA.color "#A112FF", CA.roundTop 0.2 ] ]
                     data
-                , C.binLabels .name [ CA.moveDown 25, CA.rotate 45, CA.alignRight ]
-                , C.barLabels [ CA.moveDown 12, CA.color "white", CA.fontSize 12 ]
+                , C.binLabels .name [ CA.moveDown 25, CA.color "#21cd06", CA.rotate 45, CA.alignRight ]
+                , C.barLabels [ CA.moveDown 24, CA.color "white", CA.fontSize 16 ]
                 ]
             )
         )
