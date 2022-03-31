@@ -249,7 +249,7 @@ update msg model =
 
 parseString : String -> ( String, String )
 parseString s =
-    case String.split ":::" s of
+    case String.split " (group by) " s of
         name :: groupName :: _ ->
             ( name, groupName )
 
@@ -532,7 +532,12 @@ view model =
             , let
                 data =
                     Dict.toList
-                        (groupResults model.resultsMap)
+                        (if String.contains " (group by) " model.query then
+                            groupResults model.resultsMap
+
+                         else
+                            model.resultsMap
+                        )
                         |> List.map Tuple.second
                         |> filterData model.dataFilter
               in

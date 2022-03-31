@@ -40,7 +40,7 @@ init shared =
 
         computeInput : ComputeBackend.ComputeInput
         computeInput =
-            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1 $repo) count:all" ]
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1 (group by) $repo) count:all" ]
             , experimentalOptions =
                 Just
                     { dataPoints = Just 10
@@ -73,7 +73,7 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    { title = "Zulip"
+    { title = "Zulip - codestat.dev"
     , body =
         Layout.body
             [ E.column [ E.centerX, E.paddingXY 0 64 ]
