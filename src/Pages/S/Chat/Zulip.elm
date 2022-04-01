@@ -71,7 +71,7 @@ init shared =
                     , excludeStopWords = Nothing
                     }
             , editible = Just False
-            , selectedTab = Nothing
+            , selectedTab = Just "number"
             }
 
         panel2MergedFlags =

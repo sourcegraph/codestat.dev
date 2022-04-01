@@ -12,7 +12,7 @@ import Element.Font as F
 import Element.Input as I
 import Html exposing (input, text)
 import Html.Attributes exposing (..)
-import Json.Decode as Decode exposing (Decoder, fail, field, maybe)
+import Json.Decode as Decode exposing (Decoder, fail, field, maybe, value)
 import Json.Decode.Pipeline
 import Process
 import Set exposing (Set)
@@ -107,6 +107,9 @@ init shared =
 
                                 "data" ->
                                     Data
+
+                                "number" ->
+                                    Number
 
                                 _ ->
                                     Chart
@@ -285,6 +288,9 @@ encodeTab v =
         Data ->
             "Data"
 
+        Number ->
+            "number"
+
 
 buildAddress : Model -> String
 buildAddress model =
@@ -422,6 +428,20 @@ dataView data =
         ]
 
 
+numberView : List DataValue -> E.Element Msg
+numberView data =
+    let
+        value =
+            case List.head data of
+                Just v ->
+                    v.value
+
+                Nothing ->
+                    0
+    in
+    E.el [] (E.text (String.fromFloat value))
+
+
 viewDataFilter : DataFilter -> E.Element DataFilterMsg
 viewDataFilter dataFilter =
     E.row [ E.paddingXY 0 10 ]
@@ -477,6 +497,7 @@ type Tab
     = Chart
     | Table
     | Data
+    | Number
 
 
 color =
@@ -524,6 +545,9 @@ tab thisTab selectedTab =
                 Data ->
                     color.skyBlue
 
+                Number ->
+                    color.skyBlue
+
         text =
             case thisTab of
                 Chart ->
@@ -534,6 +558,9 @@ tab thisTab selectedTab =
 
                 Data ->
                     "Data"
+
+                Number ->
+                    "Number"
     in
     E.el
         [ Border.widthEach borderWidths
@@ -559,6 +586,7 @@ outputRow selectedTab =
         [ tab Chart selectedTab
         , tab Table selectedTab
         , tab Data selectedTab
+        , tab Number selectedTab
         ]
 
 
@@ -597,6 +625,9 @@ view model =
 
                 Data ->
                     dataView data
+
+                Number ->
+                    numberView data
             ]
         ]
 
