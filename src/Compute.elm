@@ -119,21 +119,25 @@ init shared =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.batch [ ComputeBackend.receiveEvent eventDecoder ]
+subscriptions model =
+    Sub.batch [ ComputeBackend.receiveEvent (eventDecoder (buildAddress model)) ]
 
 
-eventDecoder : ComputeBackend.RawEvent -> Msg
-eventDecoder event =
-    case event.eventType of
-        Just "results" ->
-            OnResults (resultEventDecoder event.data)
+eventDecoder : String -> ComputeBackend.RawEvent -> Msg
+eventDecoder address event =
+    if event.address /= address then
+        NoOp
 
-        Just "done" ->
-            ResultStreamDone
+    else
+        case event.eventType of
+            Just "results" ->
+                OnResults (resultEventDecoder event.data)
 
-        _ ->
-            NoOp
+            Just "done" ->
+                ResultStreamDone
+
+            _ ->
+                NoOp
 
 
 resultEventDecoder : String -> List Result
@@ -174,10 +178,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnQueryChanged newQuery ->
-            Debug.log model.query
-                ( { model | query = newQuery, debounce = model.debounce + 1 }
-                , Task.perform (\_ -> OnDebounce) (Process.sleep debounceQueryInputMillis)
-                )
+            ( { model | query = newQuery, debounce = model.debounce + 1 }
+            , Task.perform (\_ -> OnDebounce) (Process.sleep debounceQueryInputMillis)
+            )
 
         OnDebounce ->
             if model.debounce - 1 == 0 then
@@ -227,10 +230,7 @@ update msg model =
                         , editible = Just True
                         }
                     , ComputeBackend.openStream
-                        ( Url.Builder.crossOrigin
-                            model.sourcegraphURL
-                            [ ".api", "compute", "stream" ]
-                            [ Url.Builder.string "q" model.query ]
+                        ( buildAddress model
                         , Nothing
                         )
                     ]
@@ -246,6 +246,14 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+buildAddress : Model -> String
+buildAddress model =
+    Url.Builder.crossOrigin
+        model.sourcegraphURL
+        [ ".api", "compute", "stream" ]
+        [ Url.Builder.string "q" model.query ]
 
 
 parseString : String -> ( String, String )

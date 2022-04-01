@@ -16,7 +16,8 @@ import Json.Decode.Pipeline
 
 
 type alias RawEvent =
-    { data : String
+    { address : String
+    , data : String
     , eventType : Maybe String
     , id : Maybe String
     }
