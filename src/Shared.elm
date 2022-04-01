@@ -69,6 +69,7 @@ init _ json =
                             { computeQueries = []
                             , experimentalOptions = Nothing
                             , editible = Nothing
+                            , selectedTab = Nothing
                             }
                     }
     in

@@ -1,6 +1,7 @@
 port module ComputeBackend exposing
     ( ComputeInput
     , RawEvent
+    , Tab
     , computeInputDecoder
     , emitInput
     , openStream
@@ -36,10 +37,16 @@ port emitInput : ComputeInput -> Cmd msg
 -- FLAGS
 
 
+type alias Tab =
+    -- "chart", "table", "data"
+    String
+
+
 type alias ComputeInput =
     { computeQueries : List String
     , experimentalOptions : Maybe ExperimentalOptions
     , editible : Maybe Bool
+    , selectedTab : Maybe Tab
     }
 
 
@@ -61,6 +68,7 @@ computeInputDecoder =
         |> Json.Decode.Pipeline.required "computeQueries" (Decode.list Decode.string)
         |> Json.Decode.Pipeline.optional "experimentalOptions" (Decode.maybe experimentalOptionsDecoder) Nothing
         |> Json.Decode.Pipeline.optional "editible" (Decode.maybe Decode.bool) Nothing
+        |> Json.Decode.Pipeline.optional "selectedTab" (Decode.maybe Decode.string) Nothing
 
 
 experimentalOptionsDecoder : Decoder ExperimentalOptions

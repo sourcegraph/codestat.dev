@@ -51,6 +51,7 @@ init shared =
                     , excludeStopWords = Nothing
                     }
             , editible = Just False
+            , selectedTab = Nothing
             }
 
         panel1MergedFlags =
@@ -70,6 +71,7 @@ init shared =
                     , excludeStopWords = Nothing
                     }
             , editible = Just False
+            , selectedTab = Nothing
             }
 
         panel2MergedFlags =

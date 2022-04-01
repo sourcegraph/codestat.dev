@@ -93,7 +93,29 @@ init shared =
                     , reverse = False
                     , excludeStopWords = False
                     }
-      , selectedTab = Chart
+      , selectedTab =
+            case shared.flags.computeInput of
+                Just { selectedTab } ->
+                    case selectedTab of
+                        Just some ->
+                            case some of
+                                "chart" ->
+                                    Chart
+
+                                "table" ->
+                                    Table
+
+                                "data" ->
+                                    Data
+
+                                _ ->
+                                    Chart
+
+                        Nothing ->
+                            Chart
+
+                Nothing ->
+                    Chart
       , debounce = 0
       , resultsMap = Dict.empty
       , editible =
@@ -205,6 +227,8 @@ update msg model =
                         , excludeStopWords = Just newDataFilter.excludeStopWords
                         }
                 , editible = Just model.editible
+                , selectedTab =
+                    Just (encodeTab model.selectedTab)
                 }
             )
 
@@ -227,7 +251,8 @@ update msg model =
                                 , reverse = Just model.dataFilter.reverse
                                 , excludeStopWords = Just model.dataFilter.excludeStopWords
                                 }
-                        , editible = Just True
+                        , editible = Just model.editible
+                        , selectedTab = Just (encodeTab model.selectedTab)
                         }
                     , ComputeBackend.openStream
                         ( buildAddress model
@@ -246,6 +271,19 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+encodeTab : Tab -> ComputeBackend.Tab
+encodeTab v =
+    case v of
+        Chart ->
+            "chart"
+
+        Table ->
+            "table"
+
+        Data ->
+            "Data"
 
 
 buildAddress : Model -> String
