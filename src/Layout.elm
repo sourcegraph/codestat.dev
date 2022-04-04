@@ -53,7 +53,7 @@ header =
                 , Font.color (E.rgb 0.7 0.7 0.7)
                 , E.paddingXY 0 8
                 ]
-                (E.text "> stats from 2m+ repositories")
+                (E.text "> stats from 2m+ OSS repositories")
             ]
         )
 

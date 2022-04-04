@@ -108,15 +108,19 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    { title = "Zulip - codestat.dev"
+    { title = "Zulip chat - codestat.dev"
     , body =
         Layout.body
             [ E.column [ E.centerX, E.paddingXY 0 64 ]
-                [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Zulip chat stats from 2m+ repositories")
+                [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Zulip chat stats from 2m+ OSS repositories")
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] (E.text "Top 10 most-linked Zulip chat groups")
                 , E.map Panel1Msg (Compute.view model.panel1)
-                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] (E.text "Unique Zulip chat rooms across 2m+ repos")
-                , E.map Panel2Msg (Compute.view model.panel2)
+                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ]
+                    (E.row []
+                        [ E.text "Unique Zulip chat rooms across 2m+ repos: "
+                        , E.map Panel2Msg (Compute.view model.panel2)
+                        ]
+                    )
                 ]
             ]
     }

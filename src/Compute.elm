@@ -592,44 +592,48 @@ outputRow selectedTab =
 
 view : Model -> E.Element Msg
 view model =
-    E.row [ E.centerX ]
-        [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
-            [ if model.editible then
-                inputRow model
+    let
+        data =
+            Dict.toList
+                (if String.contains " (group by) " model.query then
+                    groupResults model.resultsMap
 
-              else
-                E.none
-            , if model.editible then
-                outputRow model.selectedTab
+                 else
+                    model.resultsMap
+                )
+                |> List.map Tuple.second
+                |> filterData model.dataFilter
+    in
+    if model.selectedTab == Number then
+        numberView data
 
-              else
-                E.none
-            , let
-                data =
-                    Dict.toList
-                        (if String.contains " (group by) " model.query then
-                            groupResults model.resultsMap
+    else
+        E.row [ E.centerX ]
+            [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
+                [ if model.editible then
+                    inputRow model
 
-                         else
-                            model.resultsMap
-                        )
-                        |> List.map Tuple.second
-                        |> filterData model.dataFilter
-              in
-              case model.selectedTab of
-                Chart ->
-                    histogram data
+                  else
+                    E.none
+                , if model.editible then
+                    outputRow model.selectedTab
 
-                Table ->
-                    table data
+                  else
+                    E.none
+                , case model.selectedTab of
+                    Chart ->
+                        histogram data
 
-                Data ->
-                    dataView data
+                    Table ->
+                        table data
 
-                Number ->
-                    numberView data
+                    Data ->
+                        dataView data
+
+                    Number ->
+                        numberView data
+                ]
             ]
-        ]
 
 
 
