@@ -1,4 +1,4 @@
-module Layout exposing (body)
+module Layout exposing (body, howDoesThisWork)
 
 import Element as E
 import Element.Border as Border
@@ -99,4 +99,24 @@ footer =
                 , E.el [ E.centerX ] (E.text " on Twiter")
                 ]
             )
+        ]
+
+
+howDoesThisWork : E.Element msg
+howDoesThisWork =
+    E.column []
+        [ E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
+            [ E.text "codestat.dev leverages an "
+            , E.link [] { url = "https://twitter.com/rvtond/status/1509677515761094659", label = E.text "experimental Sourcegraph compute API" }
+            , E.text " to perform regex searches over the code in 2m+ open source repositories"
+            , E.text ", and then perform computation over the result set (you can explore yourself using the "
+            , E.link [] { url = "/compute", label = E.text "compute data explorer" }
+            , E.text ") We then use the "
+            , E.link [] { url = "https://elm-lang.org", label = E.text "Elm language" }
+            , E.text " to visualize the results."
+            ]
+        , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
+            [ E.text "Want a different code stat like this for OSS code or your project? Tweet requests "
+            , E.link [] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
+            ]
         ]

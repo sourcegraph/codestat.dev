@@ -108,7 +108,7 @@ view model =
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "All Zulip chat groups by most-linked")
                 , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 2)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
-                , E.el [ E.paddingXY 0 32 ] (E.text "codestat.dev leverages an experimental Sourcegraph API to perform computation over 2m+ open source repositories")
+                , Layout.howDoesThisWork
                 ]
             ]
     }
