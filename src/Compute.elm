@@ -462,14 +462,14 @@ linkCloudView query data =
         ( _, queryUrl ) =
             parseLinkQuery query
     in
-    E.wrappedRow []
+    E.paragraph [ F.size 18, E.spacing 8 ]
         (List.map
             (\value ->
                 let
                     url =
                         String.replace "$1" value.name queryUrl
                 in
-                E.link [ F.size 16 ] { url = url, label = E.text (String.concat [ value.name, "  " ]) }
+                E.link [] { url = url, label = E.text (String.concat [ value.name, "  " ]) }
             )
             data
         )

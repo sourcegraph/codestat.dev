@@ -116,7 +116,7 @@ howDoesThisWork =
             , E.text " to visualize the results."
             ]
         , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
-            [ E.text "Want a different code stat like this for OSS code or your project? Tweet requests "
+            [ E.text "Want a different code stat, or for your project? Tweet requests "
             , E.link [] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
             ]
         ]

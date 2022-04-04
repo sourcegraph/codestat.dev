@@ -134,7 +134,7 @@ view model =
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top 10 most-linked Zulip chat groups")
                 , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 1)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "All Zulip chat groups by most-linked")
-                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 450) ] (Panels.render PanelsMsg model.panels 2)
+                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 600) ] (Panels.render PanelsMsg model.panels 2)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top committers to github.com/zulip/zulip in last 6mo")
                 , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 3)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Recent commit message topics")
