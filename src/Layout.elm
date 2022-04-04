@@ -87,7 +87,7 @@ footer =
             , Border.color (E.rgb255 33 205 6)
             , E.paddingXY 8 8
             ]
-            (E.link [ E.centerX ] { url = "/compute", label = E.text "compute data explorer" })
+            (E.link [ E.centerX ] { url = "/explorer", label = E.text "compute data explorer" })
         , E.el
             [ E.width E.fill
             , Font.center
@@ -110,7 +110,7 @@ howDoesThisWork =
             , E.link [] { url = "https://twitter.com/rvtond/status/1509677515761094659", label = E.text "experimental Sourcegraph compute API" }
             , E.text " to perform regex searches over the code in 2m+ open source repositories"
             , E.text ", and then perform computation over the result set (you can explore yourself using the "
-            , E.link [] { url = "/compute", label = E.text "compute data explorer" }
+            , E.link [] { url = "/explorer", label = E.text "compute data explorer" }
             , E.text ") We then use the "
             , E.link [] { url = "https://elm-lang.org", label = E.text "Elm language" }
             , E.text " to visualize the results."

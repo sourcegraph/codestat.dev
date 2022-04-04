@@ -1,4 +1,4 @@
-module Pages.Compute exposing (Model, Msg, init, page, update, view)
+module Pages.Explorer exposing (Model, Msg, init, page, update, view)
 
 import Compute
 import Element as E
