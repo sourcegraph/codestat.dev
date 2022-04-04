@@ -65,7 +65,7 @@ init shared =
 
         panel2 : ComputeBackend.ComputeInput
         panel2 =
-            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1@@@https://$1.zulipchat.com (group by) $repo) count:all" ]
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1 (group by) $repo) count:all @@@ https://$1.zulipchat.com" ]
             , experimentalOptions =
                 Just
                     { dataPoints = Just 10000
@@ -91,8 +91,22 @@ init shared =
             , selectedTab = Just "chart"
             }
 
+        panel4 : ComputeBackend.ComputeInput
+        panel4 =
+            { computeQueries = [ "repo:github\\.com/zulip/zulip$ type:commit since:\"6 months ago\" count:10000 content:output((\\w+) -> $1) @@@ https://sourcegraph.com/search?q=context:global+repo:github%5C.com/zulip/zulip%24+type:commit+$1&patternType=regexp" ]
+            , experimentalOptions =
+                Just
+                    { dataPoints = Just 50
+                    , sortByCount = Just True
+                    , reverse = Nothing
+                    , excludeStopWords = Just True
+                    }
+            , editible = Just False
+            , selectedTab = Just "link-cloud"
+            }
+
         ( panelsModel, panelsCmd ) =
-            Panels.init PanelsMsg shared [ panel0, panel1, panel2, panel3 ]
+            Panels.init PanelsMsg shared [ panel0, panel1, panel2, panel3, panel4 ]
     in
     ( { panels = panelsModel }, panelsCmd )
 
@@ -120,9 +134,11 @@ view model =
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top 10 most-linked Zulip chat groups")
                 , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 1)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "All Zulip chat groups by most-linked")
-                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 375) ] (Panels.render PanelsMsg model.panels 2)
-                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top committers in last 6mo")
+                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 450) ] (Panels.render PanelsMsg model.panels 2)
+                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top committers to github.com/zulip/zulip in last 6mo")
                 , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 3)
+                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Recent commit message topics")
+                , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 4)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
                 , Layout.howDoesThisWork
                 ]
