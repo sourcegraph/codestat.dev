@@ -77,8 +77,22 @@ init shared =
             , selectedTab = Just "link-cloud"
             }
 
+        panel3 : ComputeBackend.ComputeInput
+        panel3 =
+            { computeQueries = [ "repo:github\\.com/zulip/zulip$ content:output((.|\n)* -> $author) type:commit since:\"6 months ago\" count:all" ]
+            , experimentalOptions =
+                Just
+                    { dataPoints = Just 10
+                    , sortByCount = Just True
+                    , reverse = Nothing
+                    , excludeStopWords = Nothing
+                    }
+            , editible = Just False
+            , selectedTab = Just "chart"
+            }
+
         ( panelsModel, panelsCmd ) =
-            Panels.init PanelsMsg shared [ panel0, panel1, panel2 ]
+            Panels.init PanelsMsg shared [ panel0, panel1, panel2, panel3 ]
     in
     ( { panels = panelsModel }, panelsCmd )
 
@@ -102,11 +116,13 @@ view model =
             [ E.column [ E.centerX ]
                 [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ]
                     (E.text "Zulip chat groups in top 2m+ repositories")
-                , E.el [ E.centerX, Font.size 60, E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 0)
+                , E.el [ E.centerX, Font.size 60, E.paddingEach { top = 64, right = 0, bottom = 64, left = 0 } ] (Panels.render PanelsMsg model.panels 0)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top 10 most-linked Zulip chat groups")
                 , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 1)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "All Zulip chat groups by most-linked")
-                , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 2)
+                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 375) ] (Panels.render PanelsMsg model.panels 2)
+                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top committers in last 6mo")
+                , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 3)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
                 , Layout.howDoesThisWork
                 ]
