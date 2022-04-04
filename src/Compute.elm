@@ -10,7 +10,7 @@ import Element.Border as Border
 import Element.Events
 import Element.Font as F
 import Element.Input as I
-import Html exposing (input, text)
+import Html exposing (input, select, text)
 import Html.Attributes exposing (..)
 import Json.Decode as Decode exposing (Decoder, fail, field, maybe, value)
 import Json.Decode.Pipeline
@@ -110,6 +110,9 @@ init shared =
 
                                 "number" ->
                                     Number
+
+                                "link-cloud" ->
+                                    LinkCloud
 
                                 _ ->
                                     Chart
@@ -291,6 +294,9 @@ encodeTab v =
         Number ->
             "number"
 
+        LinkCloud ->
+            "link-cloud"
+
 
 buildAddress : Model -> String
 buildAddress model =
@@ -442,6 +448,31 @@ numberView data =
     E.el [] (E.text (String.fromFloat value))
 
 
+linkCloudView : List DataValue -> E.Element Msg
+linkCloudView data =
+    E.wrappedRow []
+        (List.map
+            (\d ->
+                let
+                    ( name, url ) =
+                        parseLinkCloudPair d.name
+                in
+                E.link [] { url = url, label = E.text (String.concat [ name, "   " ]) }
+            )
+            data
+        )
+
+
+parseLinkCloudPair : String -> ( String, String )
+parseLinkCloudPair s =
+    case String.split "@@@" s of
+        name :: url :: _ ->
+            ( name, url )
+
+        _ ->
+            ( s, s )
+
+
 viewDataFilter : DataFilter -> E.Element DataFilterMsg
 viewDataFilter dataFilter =
     E.row [ E.paddingXY 0 10 ]
@@ -498,6 +529,7 @@ type Tab
     | Table
     | Data
     | Number
+    | LinkCloud
 
 
 color =
@@ -548,6 +580,9 @@ tab thisTab selectedTab =
                 Number ->
                     color.skyBlue
 
+                LinkCloud ->
+                    color.skyBlue
+
         text =
             case thisTab of
                 Chart ->
@@ -561,6 +596,9 @@ tab thisTab selectedTab =
 
                 Number ->
                     "Number"
+
+                LinkCloud ->
+                    "Link cloud"
     in
     E.el
         [ Border.widthEach borderWidths
@@ -587,6 +625,7 @@ outputRow selectedTab =
         , tab Table selectedTab
         , tab Data selectedTab
         , tab Number selectedTab
+        , tab LinkCloud selectedTab
         ]
 
 
@@ -632,6 +671,9 @@ view model =
 
                     Number ->
                         numberView data
+
+                    LinkCloud ->
+                        linkCloudView data
                 ]
             ]
 
