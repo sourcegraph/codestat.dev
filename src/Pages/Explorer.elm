@@ -61,6 +61,8 @@ view model =
                 , E.el [ E.paddingXY 0 32 ] (E.map WordCloudMsg (Compute.view model.wordCloud))
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "About")
                 , about
+                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Who?")
+                , about
                 ]
             ]
     }
@@ -85,6 +87,7 @@ about =
         , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
             [ E.text "All this stuff is pretty early stages! Feel free to tweet us "
             , E.link [] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
+            , E.text " for help/requests!"
             ]
         ]
 

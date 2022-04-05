@@ -88,7 +88,7 @@ view model =
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Behind the scenes we leverage an experimental "
                     , E.link [] { url = "https://twitter.com/rvtond/status/1509677515761094659", label = E.text "Sourcegraph compute API" }
-                    , E.text " to perform computation over thousands/millions of search results from Sourcegraph code search"
+                    , E.text " to perform computation over thousands to millions of search results from Sourcegraph code search"
                     , E.text " (you can explore yourself using the "
                     , E.link [] { url = "/explorer", label = E.text "compute data explorer" }
                     , E.text ".) We then use the "
