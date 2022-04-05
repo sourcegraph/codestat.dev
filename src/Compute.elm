@@ -10,7 +10,7 @@ import Element.Border as Border
 import Element.Events
 import Element.Font as F
 import Element.Input as I
-import Html exposing (input, select, text)
+import Html exposing (input, text)
 import Html.Attributes exposing (..)
 import Json.Decode as Decode exposing (Decoder, fail, field, maybe, value)
 import Json.Decode.Pipeline
@@ -337,7 +337,7 @@ groupResults inputDict =
 
         updateEntry s dict =
             let
-                ( name, groupName ) =
+                ( name, _ ) =
                     parseString s
             in
             Dict.update name (updateValue name) dict

@@ -22,7 +22,7 @@ type Msg
 
 
 page : Shared.Model -> Request -> Page.With Model Msg
-page shared req =
+page shared _ =
     Page.element
         { init = init shared
         , update = update
