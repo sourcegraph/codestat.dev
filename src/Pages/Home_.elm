@@ -84,6 +84,17 @@ view model =
                 , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Once results stop loading, you'll see Logger is the most popular name found in ~33 of the top Go repositories!"
                     ]
+                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Recent project stats")
+                , E.column [ E.paddingEach { top = 16, right = 0, bottom = 32, left = 0 } ]
+                    [ E.row []
+                        [ E.text "• "
+                        , E.link [ Region.heading 1, E.paddingXY 0 8 ] { url = "/s/zulip", label = E.text "Zulip" }
+                        , E.text " - chat software for distributed teams"
+                        ]
+                    , E.row []
+                        [ E.text "• more projects coming soon.."
+                        ]
+                    ]
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "How it works")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Behind the scenes we leverage an experimental "
@@ -98,14 +109,6 @@ view model =
                 , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "We create dashboards for interesting stats/projects and post them to our Twitter "
                     , E.link [] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
-                    ]
-                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Current stats")
-                , E.column [ E.paddingEach { top = 16, right = 0, bottom = 32, left = 0 } ]
-                    [ E.row []
-                        [ E.text "• "
-                        , E.link [ Region.heading 1, E.paddingXY 0 8 ] { url = "/s/chat/zulip", label = E.text "Zulip chat" }
-                        , E.text " (Zulip chat programming groups found across all top 2 million repositories)"
-                        ]
                     ]
                 ]
             ]

@@ -27,6 +27,6 @@ elm-spa server  # starts this app at http:/localhost:1234
 
 ## Adding a new dashboard
 
-It's pretty simple! Duplicate `S/Chat/Zulip.elm` (which corresponds to `/s/chat/zulip`, be sure to put yours under a relevant stat category under `/s/`).
+It's pretty simple! Duplicate `S/Zulip.elm` (which corresponds to `/s/zulip`, be sure to put yours under a relevant URL under `/s/` - projects are `/s/project` while one-off stats are `/s/project/stat-name` under the project they're relevant to).
 
 Look in the file for `panel0` - this is where you can modify the panels that appear on the page, their queries, etc.

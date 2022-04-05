@@ -1,4 +1,4 @@
-module Pages.P.Zulip exposing (Model, Msg, init, page, update, view)
+module Pages.S.Zulip exposing (Model, Msg, init, page, update, view)
 
 import ComputeBackend
 import Element as E
