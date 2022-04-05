@@ -1,28 +1,32 @@
-# my new project
-> 🌳  built with [elm-spa](https://elm-spa.dev)
+# [codestat.dev](https://codestat.dev): stats about code computed from 2m+ open source repositories
 
-## dependencies
+Follow [@codestat_dev](https://twitter.com/codestat_dev) on Twitter so you don't miss any new code stats!
 
-This project requires the latest LTS version of [Node.js](https://nodejs.org/)
+## 🌳 Elm
+
+codestat.dev is written in the [Elm language](https://elm-lang.org/) and built with [elm-spa](https://elm-spa.dev). Before diving in, check out:
+
+* [elm-spa.dev](https://elm-spa.dev)
+* [Elm guide](https://guide.elm-lang.org/)
+
+Don't be afraid to just jump in and try changing things, though! The Elm compiler is really good about telling you if anything is wrong.
+
+## Developing
+
+Install Elm and elm-spa (may require latest LTS version of [Node.js](https://nodejs.org/)):
 
 ```bash
 npm install -g elm elm-spa
 ```
 
-## running locally
+### running locally
 
 ```bash
 elm-spa server  # starts this app at http:/localhost:1234
 ```
 
-### other commands
+## Adding a new dashboard
 
-```bash
-elm-spa add    # add a new page to the application
-elm-spa build  # production build
-elm-spa watch  # runs build as you code (without the server)
-```
+It's pretty simple! Duplicate `S/Chat/Zulip.elm` (which corresponds to `/s/chat/zulip`, be sure to put yours under a relevant stat category under `/s/`).
 
-## learn more
-
-You can learn more at [elm-spa.dev](https://elm-spa.dev)
+Look in the file for `panel0` - this is where you can modify the panels that appear on the page, their queries, etc.
