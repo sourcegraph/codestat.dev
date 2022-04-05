@@ -1,4 +1,4 @@
-# [codestat.dev](https://codestat.dev): stats about code computed from 2m+ open source repositories
+# [codestat.dev](https://codestat.dev): stats from 2m+ OSS repositories
 
 Follow [@codestat_dev](https://twitter.com/codestat_dev) on Twitter so you don't miss any new code stats!
 
