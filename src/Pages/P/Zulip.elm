@@ -1,4 +1,4 @@
-module Pages.S.Chat.Zulip exposing (Model, Msg, init, page, update, view)
+module Pages.P.Zulip exposing (Model, Msg, init, page, update, view)
 
 import ComputeBackend
 import Element as E
