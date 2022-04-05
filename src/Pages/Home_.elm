@@ -82,7 +82,7 @@ view model =
                     ]
                 , E.el [ E.paddingEach { top = 32, right = 0, bottom = 50, left = 0 } ] (Panels.render PanelsMsg model.panels 0)
                 , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
-                    [ E.text "Once results stop loading, you'll see Logger is the most popular name found in ~30% of the top Go repositories!"
+                    [ E.text "Once results stop loading, you'll see Logger is the most popular name found in ~33 of the top Go repositories!"
                     ]
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "How it works")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
