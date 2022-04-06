@@ -3,6 +3,7 @@ module Pages.Home_ exposing (Model, Msg, init, page, update, view)
 import Compute
 import ComputeBackend
 import Element as E
+import Element.Border as Border
 import Element.Font as Font
 import Element.Region as Region
 import Layout
@@ -86,19 +87,24 @@ view model =
                 , E.paragraph [ E.paddingEach { top = 48, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Once the results finish loading, you'll see that \"Logger\" is the most popular Go interface name found and is found in 33 of the top 100 Go repositories!"
                     ]
-                , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 48, right = 0, bottom = 0, left = 0 } ] (E.text "🔥 The cool stuff (LOOK HERE) 🔥")
-                , E.column [ E.paddingEach { top = 16, right = 0, bottom = 16, left = 0 } ]
-                    [ E.row [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ]
-                        [ E.text "• "
-                        , E.link [ Region.heading 1, E.paddingXY 0 8, Font.size 18 ] { url = "/s/zulip", label = E.text "Zulip" }
-                        , E.text " - stats about the chat software for distributed teams"
-                        ]
-                    , E.row []
-                        [ E.text "• "
-                        , E.el [ Font.size 12 ] (E.text "more coming soon..")
+                , E.el [ E.centerX, Region.heading 2, Font.size 20, E.paddingEach { top = 48, right = 0, bottom = 16, left = 0 } ] (E.text "🔥 All project stats 🔥")
+                , E.column
+                    [ E.paddingEach { top = 16, right = 0, bottom = 16, left = 0 }
+                    , Border.widthEach { bottom = 1, left = 0, right = 0, top = 1 }
+                    , Border.color (E.rgb255 33 205 6)
+                    , E.width E.fill
+                    ]
+                    [ E.row [ E.padding 16 ]
+                        [ statGroup "Zulip"
+                            [ ( "chat groups", "/s/zulip/groups" )
+                            , ( "development", "/s/zulip/dev" )
+                            ]
                         ]
                     , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
-                        [ E.text "We create dedicated pages for OSS projects & random one-off stats you're curious about. Just tweet "
+                        [ E.el [ Font.size 12 ] (E.text "(more coming soon)")
+                        ]
+                    , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
+                        [ E.text "Want a custom code stat? We'll add it! Just tweet us "
                         , E.link [] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
                         ]
                     ]
@@ -136,6 +142,34 @@ view model =
                 ]
             ]
     }
+
+
+statGroup : String -> List ( String, String ) -> E.Element msg
+statGroup groupName stats =
+    E.column [ E.padding 8 ]
+        [ E.el
+            [ E.centerX
+            , Region.heading 3
+            , Font.size 20
+            , E.paddingEach { top = 0, right = 0, bottom = 16, left = 0 }
+            ]
+            (E.text groupName)
+        , E.column
+            [ Border.widthEach { bottom = 1, left = 1, right = 1, top = 1 }
+            , Border.color (E.rgb255 33 205 6)
+            , E.padding 8
+            ]
+            (List.map stat stats)
+        ]
+
+
+stat : ( String, String ) -> E.Element msg
+stat labelUrl =
+    let
+        ( label, url ) =
+            labelUrl
+    in
+    E.link [ E.padding 8 ] { url = url, label = E.text label }
 
 
 subscriptions : Model -> Sub Msg

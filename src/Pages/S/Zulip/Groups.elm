@@ -1,4 +1,4 @@
-module Pages.S.Zulip exposing (Model, Msg, init, page, update, view)
+module Pages.S.Zulip.Groups exposing (Model, Msg, init, page, update, view)
 
 import Compute
 import ComputeBackend
@@ -78,36 +78,8 @@ init shared =
             , selectedTab = Just "link-cloud"
             }
 
-        panel3 : ComputeBackend.ComputeInput
-        panel3 =
-            { computeQueries = [ "repo:github\\.com/zulip/zulip$ content:output((.|\n)* -> $author) type:commit since:\"6 months ago\" count:all" ]
-            , experimentalOptions =
-                Just
-                    { dataPoints = Just 10
-                    , sortByCount = Just True
-                    , reverse = Nothing
-                    , excludeStopWords = Nothing
-                    }
-            , editible = Just False
-            , selectedTab = Just "chart"
-            }
-
-        panel4 : ComputeBackend.ComputeInput
-        panel4 =
-            { computeQueries = [ "repo:github\\.com/zulip/zulip$ type:commit since:\"6 months ago\" count:5000 content:output((\\w+) -> $1) @@@ https://sourcegraph.com/search?q=context:global+repo:github%5C.com/zulip/zulip%24+type:commit+$1&patternType=regexp" ]
-            , experimentalOptions =
-                Just
-                    { dataPoints = Just 50
-                    , sortByCount = Just True
-                    , reverse = Nothing
-                    , excludeStopWords = Just True
-                    }
-            , editible = Just False
-            , selectedTab = Just "link-cloud"
-            }
-
         ( panelsModel, panelsCmd ) =
-            Panels.init PanelsMsg shared [ panel0, panel1, panel2, panel3, panel4 ]
+            Panels.init PanelsMsg shared [ panel0, panel1, panel2 ]
     in
     ( { panels = panelsModel }, panelsCmd )
 
@@ -125,7 +97,7 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    { title = "Zulip chat - codestat.dev"
+    { title = "zulip/groups - codestat.dev"
     , body =
         Layout.body
             [ E.column [ E.centerX ]
@@ -136,10 +108,6 @@ view model =
                 , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 1 Compute.defaults)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "All Zulip chat groups by most-linked")
                 , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 2 { minHeight = Just 550 })
-                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top committers to github.com/zulip/zulip in last 6mo")
-                , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 3 Compute.defaults)
-                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Recent commit message topics")
-                , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 4 { minHeight = Just 200 })
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
                 , Layout.howDoesThisWork
                 ]
