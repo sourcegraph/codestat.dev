@@ -659,8 +659,9 @@ view model =
         numberView data
 
     else
-        E.row [ E.centerX ]
-            [ E.column [ E.centerX, E.width (E.fill |> E.maximum width), E.paddingXY 20 20 ]
+        E.row
+            [ E.centerX, E.width (E.fill |> E.maximum 850) ]
+            [ E.column [ E.centerX, E.width E.fill, E.paddingXY 20 20 ]
                 [ if model.editible then
                     inputRow model
 

@@ -130,15 +130,15 @@ view model =
             [ E.column [ E.centerX ]
                 [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ]
                     (E.text "Zulip chat groups in top 2m+ repositories")
-                , E.el [ E.centerX, Font.size 60, E.paddingEach { top = 64, right = 0, bottom = 64, left = 0 } ] (Panels.render PanelsMsg model.panels 0)
+                , E.el [ E.centerX, Font.size 60, E.paddingEach { top = 64, right = 0, bottom = 64, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 0)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top 10 most-linked Zulip chat groups")
-                , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 1)
+                , E.el [ E.paddingXY 0 32, E.width E.fill ] (Panels.render PanelsMsg model.panels 1)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "All Zulip chat groups by most-linked")
-                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 600) ] (Panels.render PanelsMsg model.panels 2)
+                , E.el [ E.paddingXY 0 32, E.height (E.fill |> E.minimum 600), E.width E.fill ] (Panels.render PanelsMsg model.panels 2)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Top committers to github.com/zulip/zulip in last 6mo")
-                , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 3)
+                , E.el [ E.paddingXY 0 32, E.width E.fill ] (Panels.render PanelsMsg model.panels 3)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Recent commit message topics")
-                , E.el [ E.paddingXY 0 32 ] (Panels.render PanelsMsg model.panels 4)
+                , E.el [ E.paddingXY 0 32, E.width E.fill ] (Panels.render PanelsMsg model.panels 4)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
                 , Layout.howDoesThisWork
                 ]

@@ -80,7 +80,7 @@ view model =
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "For example-we can search the top 100 Go repositories and find the most popular interface type name:"
                     ]
-                , E.el [ E.paddingEach { top = 32, right = 0, bottom = 50, left = 0 } ] (Panels.render PanelsMsg model.panels 0)
+                , E.el [ E.paddingEach { top = 32, right = 0, bottom = 50, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 0)
                 , E.paragraph [ E.paddingXY 0 32, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Once results stop loading, you'll see Logger is the most popular name found in ~33 of the top Go repositories!"
                     ]
