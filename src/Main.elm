@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Browser.Dom
 import Browser.Navigation as Nav exposing (Key)
 import Effect
 import Gen.Model
@@ -8,6 +9,7 @@ import Gen.Pages as Pages
 import Gen.Route as Route
 import Request
 import Shared
+import Task
 import Url exposing (Url)
 import View
 
@@ -62,6 +64,7 @@ type Msg
     | ClickedLink Browser.UrlRequest
     | Shared Shared.Msg
     | Page Pages.Msg
+    | NoOp
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -84,7 +87,7 @@ update msg model =
                         Pages.init (Route.fromUrl url) model.shared url model.key
                 in
                 ( { model | url = url, page = page }
-                , Effect.toCmd ( Shared, Page ) effect
+                , Cmd.batch [ Effect.toCmd ( Shared, Page ) effect, resetViewport ]
                 )
 
             else
@@ -119,6 +122,14 @@ update msg model =
             ( { model | page = page }
             , Effect.toCmd ( Shared, Page ) effect
             )
+
+        NoOp ->
+            ( model, Cmd.none )
+
+
+resetViewport : Cmd Msg
+resetViewport =
+    Task.perform (\_ -> NoOp) (Browser.Dom.setViewport 0 0)
 
 
 
