@@ -121,7 +121,7 @@ view model =
                     , E.link [] { url = "https://sourcegraph.com", label = E.text "Sourcegraph" }
                     , E.text " a little over 7 years, and a coworker of mine "
                     , E.link [] { url = "https://twitter.com/rvtond", label = E.text "Rijnard Van Tonder" }
-                    , E.text ", researcher on the Search Core team, has been tirelessly building out this 'search compute' engine for the past few years as a sort of one-man passion project. I remember the day he joined he was talking about building this, he has since pulled in a few other passionate engineers!"
+                    , E.text " (researcher on the Search Core team), has been tirelessly building out this 'search compute' engine for the past few years as a sort of one-man passion project. I remember the day he joined he was talking about building this, he has since pulled in a few other passionate engineers!"
                     ]
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text " Recently, the backend API began to really come together. At the same time, I kept hearing great things about the Elm language, and it turned out he was using it to prototype! "
