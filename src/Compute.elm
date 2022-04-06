@@ -655,40 +655,36 @@ view model =
                 |> List.map Tuple.second
                 |> filterData model.dataFilter
     in
-    if model.selectedTab == Number then
-        numberView data
+    E.row
+        [ E.centerX, E.width (E.fill |> E.maximum 850) ]
+        [ E.column [ E.centerX, E.width E.fill, E.paddingXY 20 20 ]
+            [ if model.editible then
+                inputRow model
 
-    else
-        E.row
-            [ E.centerX, E.width (E.fill |> E.maximum 850) ]
-            [ E.column [ E.centerX, E.width E.fill, E.paddingXY 20 20 ]
-                [ if model.editible then
-                    inputRow model
+              else
+                E.none
+            , if model.editible then
+                outputRow model.selectedTab
 
-                  else
-                    E.none
-                , if model.editible then
-                    outputRow model.selectedTab
+              else
+                E.none
+            , case model.selectedTab of
+                Chart ->
+                    histogram data
 
-                  else
-                    E.none
-                , case model.selectedTab of
-                    Chart ->
-                        histogram data
+                Table ->
+                    table data
 
-                    Table ->
-                        table data
+                Data ->
+                    dataView data
 
-                    Data ->
-                        dataView data
+                Number ->
+                    numberView data
 
-                    Number ->
-                        numberView data
-
-                    LinkCloud ->
-                        linkCloudView model.query data
-                ]
+                LinkCloud ->
+                    linkCloudView model.query data
             ]
+        ]
 
 
 
