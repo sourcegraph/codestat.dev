@@ -1,4 +1,4 @@
-module Compute exposing (Model, Msg, init, subscriptions, update, view)
+module Compute exposing (Model, Msg, Settings, defaults, init, subscriptions, update, view)
 
 import Chart as C
 import Chart.Attributes as CA
@@ -188,6 +188,7 @@ type Msg
     | OnDebounce
     | OnDataFilter DataFilterMsg
     | OnTabSelected Tab
+    | OnToggleEditible
       -- Data processing
     | RunCompute
     | OnResults (List Result)
@@ -240,6 +241,9 @@ update msg model =
 
         OnTabSelected selectedTab ->
             ( { model | selectedTab = selectedTab }, Cmd.none )
+
+        OnToggleEditible ->
+            ( { model | editible = not model.editible }, Cmd.none )
 
         RunCompute ->
             let
@@ -453,7 +457,7 @@ numberView data =
                 Nothing ->
                     0
     in
-    E.el [] (E.text (String.fromFloat value))
+    E.el [ F.size 60 ] (E.text (String.fromFloat value))
 
 
 linkCloudView : String -> List DataValue -> E.Element Msg
@@ -641,8 +645,17 @@ outputRow selectedTab =
         ]
 
 
-view : Model -> E.Element Msg
-view model =
+type alias Settings =
+    { minHeight : Maybe Int }
+
+
+defaults : Settings
+defaults =
+    { minHeight = Nothing }
+
+
+view : Settings -> Model -> E.Element Msg
+view settings model =
     let
         data =
             Dict.toList
@@ -656,9 +669,26 @@ view model =
                 |> filterData model.dataFilter
     in
     E.row
-        [ E.centerX, E.width (E.fill |> E.maximum 850) ]
-        [ E.column [ E.centerX, E.width E.fill, E.paddingXY 20 20 ]
-            [ if model.editible then
+        [ E.centerX
+        , E.width (E.fill |> E.maximum 850)
+        , case settings.minHeight of
+            Just min ->
+                E.height (E.fill |> E.minimum min)
+
+            Nothing ->
+                E.height E.fill
+        ]
+        [ E.column [ E.centerX, E.width E.fill, E.height E.fill, E.paddingXY 20 20 ]
+            [ E.el [ E.alignRight, F.size 12, Element.Events.onClick OnToggleEditible, E.paddingXY 8 8, E.pointer ]
+                (E.text
+                    (if model.editible then
+                        "(hide)"
+
+                     else
+                        "(source)"
+                    )
+                )
+            , if model.editible then
                 inputRow model
 
               else

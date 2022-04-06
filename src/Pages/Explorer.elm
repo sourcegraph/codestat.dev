@@ -58,7 +58,7 @@ view model =
         Layout.body
             [ E.column [ E.centerX, E.paddingXY 0 64 ]
                 [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Compute data explorer")
-                , E.el [ E.paddingXY 0 32, E.width E.fill ] (E.map WordCloudMsg (Compute.view model.wordCloud))
+                , E.el [ E.paddingXY 0 32, E.width E.fill ] (E.map WordCloudMsg (Compute.view Compute.defaults model.wordCloud))
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] (E.text "How do I use this?")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Documentation is lacking right now, sorry! We're working on it. For now I suggest you check out "

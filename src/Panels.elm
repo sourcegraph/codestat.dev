@@ -63,11 +63,11 @@ update panelMsg msg model =
                     ( model, Cmd.none )
 
 
-render : (Msg -> msg) -> Array Compute.Model -> Int -> E.Element msg
-render panelMsg panels index =
+render : (Msg -> msg) -> Array Compute.Model -> Int -> Compute.Settings -> E.Element msg
+render panelMsg panels index settings =
     case Array.get index panels of
         Just panel ->
-            E.map panelMsg (E.map (Index index) (Compute.view panel))
+            E.map panelMsg (E.map (Index index) (Compute.view settings panel))
 
         Nothing ->
             E.none

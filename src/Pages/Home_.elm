@@ -1,5 +1,6 @@
 module Pages.Home_ exposing (Model, Msg, init, page, update, view)
 
+import Compute
 import ComputeBackend
 import Element as E
 import Element.Font as Font
@@ -72,7 +73,8 @@ view model =
     , body =
         Layout.body
             [ E.column [ E.centerX ]
-                [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Real time stats from 2 million open source repositories")
+                [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "(WORK IN PROGRESS, NOT DONE YET, please don't post me anywhere!)")
+                , E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Real time stats from 2 million open source repositories")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "codestat.dev runs regex search queries over 2m+ open source repositories and performs"
                     , E.text " computation in real time, as thousands of results stream in to your browser!"
@@ -80,7 +82,7 @@ view model =
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Ever wondered what most popular `interface` type name is in the top 100 Go repositories? We can answer that:"
                     ]
-                , E.el [ E.paddingEach { top = 32, right = 0, bottom = 50, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 0)
+                , E.el [ E.paddingEach { top = 32, right = 0, bottom = 50, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 0 Compute.defaults)
                 , E.paragraph [ E.paddingEach { top = 48, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Once the results finish loading, you'll see that \"Logger\" is the most popular Go interface name found and is found in 33 of the top 100 Go repositories!"
                     ]
@@ -117,9 +119,9 @@ view model =
                     [ E.link [] { url = "https://twitter.com/slimsag", label = E.text "Stephen Gutekanst" }
                     , E.text " here! I've been working at "
                     , E.link [] { url = "https://sourcegraph.com", label = E.text "Sourcegraph" }
-                    , E.text " a little over 7 years, and a coworker of mine ("
+                    , E.text " a little over 7 years, and a coworker of mine "
                     , E.link [] { url = "https://twitter.com/rvtond", label = E.text "Rijnard Van Tonder" }
-                    , E.text ", researcher on the Search Core team) has been tirelessly building out this 'search compute' engine for the past few years as a sort of one-man passion project. I remember the day he joined he was talking about building this, and has since pulled in a few other passionate engineers!"
+                    , E.text ", researcher on the Search Core team, has been tirelessly building out this 'search compute' engine for the past few years as a sort of one-man passion project. I remember the day he joined he was talking about building this, and has since pulled in a few other passionate engineers!"
                     ]
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text " Recently, the backend API began to really come together. At the same time, I kept hearing great things about the Elm language, and it turned out he was using it to prototype! "
@@ -128,7 +130,7 @@ view model =
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Conveniently, my manager had just given me a week to try out a crazy-idea *and* I had another full week for a hackathon - two weeks! - so I took the opportunity to learn Elm (which was hard, but worth it) and pester my coworker for all his knowledge. codestat.dev was born! "
                     ]
-                , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 64, left = 0 }, E.width (E.fill |> E.maximum 800) ]
+                , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "This isn't an officially supported Sourcegraph project for now, all very experimental! If you like it, let us know! "
                     ]
                 ]

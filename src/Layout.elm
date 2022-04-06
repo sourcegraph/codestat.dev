@@ -20,7 +20,7 @@ body content =
             , E.row [ E.width E.fill, E.height E.fill ]
                 [ E.column [ E.height E.fill, E.width E.fill ] content
                 ]
-            , E.row [ E.width E.fill ] [ footer ]
+            , E.row [ E.width E.fill, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] [ footer ]
             ]
         )
     ]
