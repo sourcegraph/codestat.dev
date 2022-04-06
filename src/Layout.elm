@@ -91,12 +91,23 @@ footer =
         , E.el
             [ E.width E.fill
             , Font.center
+            , Border.widthEach { bottom = 0, left = 0, right = 1, top = 0 }
+            , Border.color (E.rgb255 33 205 6)
             , E.paddingXY 8 8
             ]
             (E.row [ E.width E.fill, Font.center, E.centerX, Font.justify ]
-                [ E.el [ E.centerX ] (E.text "feedback / requests? ")
-                , E.link [ E.centerX ] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
-                , E.el [ E.centerX ] (E.text " on Twiter")
+                [ E.link [ E.centerX ] { url = "https://twitter.com/codestat_dev", label = E.text "@codestat_dev" }
+                , E.el [ E.centerX ] (E.text " on Twitter")
+                ]
+            )
+        , E.el
+            [ E.width E.fill
+            , Font.center
+            , E.paddingXY 8 8
+            ]
+            (E.row [ E.width E.fill, Font.center, E.centerX, Font.justify ]
+                [ E.el [ E.centerX ] (E.text "view the source on ")
+                , E.link [ E.centerX ] { url = "https://github.com/sourcegraph/codestat.dev", label = E.text "GitHub" }
                 ]
             )
         ]
