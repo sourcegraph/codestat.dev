@@ -63,7 +63,7 @@ view model =
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Documentation is lacking right now, sorry! We're working on it. For now I suggest you check out "
                     , E.link [] { url = "https://twitter.com/rvtond/status/1509677515761094659", label = E.text "this Twitter thread" }
-                    , E.text " which details some of the capabilities here."
+                    , E.text " which details some of the capabilities. You can also click the (source) text next to any stat (on the homepage, etc.) to see the query it uses."
                     ]
                 ]
             ]
