@@ -131,7 +131,7 @@ view model =
                     [ E.text "Conveniently, my manager had just given me a week to try out a crazy-idea *and* I had another full week for a hackathon - two weeks! - so I took the opportunity to learn Elm (which was hard, but worth it) and pester my coworker for all his knowledge. codestat.dev was born! "
                     ]
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
-                    [ E.text "This isn't an officially supported Sourcegraph project for now, all very experimental! If you like it, let us know! "
+                    [ E.text "This isn't an officially supported Sourcegraph project, all very experimental! If you like it, let us know! "
                     ]
                 ]
             ]
