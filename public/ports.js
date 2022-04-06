@@ -26,6 +26,7 @@ function initElmPorts(app) {
       eventSource.addEventListener('error', sendEventToElm(address))
       eventSource.addEventListener('done', function (event) {
         console.log('Done')
+        eventSource.close()
         // Note: 'done:true' is sent in progress too. But we want a 'done' for the entire stream in case we don't see it.
         sendEventToElm(address)({ type: 'done', data: '' })
       })
