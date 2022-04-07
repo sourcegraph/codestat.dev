@@ -99,6 +99,9 @@ view model =
                             [ ( "chat groups", "/s/zulip/groups" )
                             , ( "development", "/s/zulip/dev" )
                             ]
+                        , statGroup "Golang"
+                            [ ( "development", "/s/golang/dev" )
+                            ]
                         ]
                     , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                         [ E.el [ Font.size 12 ] (E.text "(more coming soon)")
