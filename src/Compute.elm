@@ -378,9 +378,12 @@ updateDataFilter msg dataFilter =
 -- VIEW
 
 
-table : List DataValue -> E.Element Msg
-table data =
+table : String -> List DataValue -> E.Element Msg
+table query data =
     let
+        ( _, queryUrl ) =
+            parseLinkQuery query
+
         headerAttrs =
             [ F.bold
             , F.size 12
@@ -395,7 +398,21 @@ table data =
             , columns =
                 [ { header = E.el headerAttrs (E.text " ")
                   , width = E.fillPortion 2
-                  , view = \v -> E.el [ E.padding 5 ] (E.el [ E.width E.fill, E.padding 10, Border.rounded 5, Border.width 1 ] (E.text v.name))
+                  , view =
+                        \v ->
+                            E.el [ E.padding 5 ]
+                                (E.el [ E.width E.fill, E.padding 10, Border.rounded 5, Border.width 1 ]
+                                    (if queryUrl == "" then
+                                        E.text v.name
+
+                                     else
+                                        let
+                                            url =
+                                                String.replace "$1" v.name queryUrl
+                                        in
+                                        E.link [] { url = url, label = E.text v.name }
+                                    )
+                                )
                   }
                 , { header = E.el (headerAttrs ++ [ F.alignRight ]) (E.text "Count")
                   , width = E.fillPortion 1
@@ -486,7 +503,7 @@ parseLinkQuery s =
             ( realQuery, url )
 
         _ ->
-            ( s, s )
+            ( s, "" )
 
 
 viewDataFilter : DataFilter -> E.Element DataFilterMsg
@@ -703,7 +720,7 @@ view settings model =
                     histogram data
 
                 Table ->
-                    table data
+                    table model.query data
 
                 Data ->
                     dataView data
