@@ -38,7 +38,7 @@ init shared =
     let
         panel0 : ComputeBackend.ComputeInput
         panel0 =
-            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://\\w+\\.(zulipchat\\.com) -> $1) count:all" ]
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://[-\\w]+\\.(zulipchat\\.com) -> $1) count:all" ]
             , experimentalOptions =
                 Just
                     { dataPoints = Just 20
@@ -52,7 +52,7 @@ init shared =
 
         panel1 : ComputeBackend.ComputeInput
         panel1 =
-            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1 (group by) $repo) count:all" ]
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://([-\\w]+)\\.zulipchat\\.com -> $1 (group by) $repo) count:all" ]
             , experimentalOptions =
                 Just
                     { dataPoints = Just 10
@@ -66,7 +66,7 @@ init shared =
 
         panel2 : ComputeBackend.ComputeInput
         panel2 =
-            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://(\\w+)\\.zulipchat\\.com -> $1 (group by) $repo) count:all @@@ https://$1.zulipchat.com" ]
+            { computeQueries = [ "(lang:markdown OR lang:text) content:output(https://([-\\w]+)\\.zulipchat\\.com -> $1 (group by) $repo) count:all @@@ https://$1.zulipchat.com" ]
             , experimentalOptions =
                 Just
                     { dataPoints = Just 10000
