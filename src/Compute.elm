@@ -61,6 +61,7 @@ type alias Model =
     , dataFilter : DataFilter
     , selectedTab : Tab
     , resultsMap : Dict String DataValue
+    , resultCount : Int
     , editible : Bool
 
     -- Debug client only
@@ -124,6 +125,7 @@ init shared =
                     Chart
       , debounce = 0
       , resultsMap = Dict.empty
+      , resultCount = 0
       , editible =
             case shared.flags.computeInput of
                 Just { editible } ->
@@ -254,7 +256,7 @@ update msg model =
                 ( { model | resultsMap = exampleResultsMap }, Cmd.none )
 
             else
-                ( { model | resultsMap = Dict.empty }
+                ( { model | resultsMap = Dict.empty, resultCount = 0 }
                 , Cmd.batch
                     [ ComputeBackend.emitInput
                         { computeQueries = [ query ]
@@ -276,7 +278,10 @@ update msg model =
                 )
 
         OnResults r ->
-            ( { model | resultsMap = List.foldl updateResultsMap model.resultsMap (parseResults r) }
+            ( { model
+                | resultsMap = List.foldl updateResultsMap model.resultsMap (parseResults r)
+                , resultCount = model.resultCount + List.length r
+              }
             , Cmd.none
             )
 
@@ -696,15 +701,18 @@ view settings model =
                 E.height E.fill
         ]
         [ E.column [ E.centerX, E.width E.fill, E.height E.fill, E.paddingXY 20 20 ]
-            [ E.el [ E.alignRight, F.size 12, Element.Events.onClick OnToggleEditible, E.paddingXY 8 8, E.pointer ]
-                (E.text
-                    (if model.editible then
-                        "(hide)"
+            [ E.row [ E.width E.fill ]
+                [ E.el [ E.alignLeft ] (E.text (String.concat [ "analyzed ", String.fromInt model.resultCount, " results" ]))
+                , E.el [ E.alignRight, F.size 12, Element.Events.onClick OnToggleEditible, E.paddingXY 8 8, E.pointer ]
+                    (E.text
+                        (if model.editible then
+                            "(hide)"
 
-                     else
-                        "(source)"
+                         else
+                            " (source)"
+                        )
                     )
-                )
+                ]
             , if model.editible then
                 inputRow model
 
