@@ -161,6 +161,8 @@ statGroup groupName stats =
             [ Border.widthEach { bottom = 1, left = 1, right = 1, top = 1 }
             , Border.color (E.rgb255 33 205 6)
             , E.padding 8
+            , E.height (E.fill |> E.minimum 100)
+            , E.width (E.fill |> E.minimum 100)
             ]
             (List.map stat stats)
         ]
