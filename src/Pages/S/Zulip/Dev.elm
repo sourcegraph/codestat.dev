@@ -64,8 +64,22 @@ init shared =
             , selectedTab = Just "link-cloud"
             }
 
+        panel2 : ComputeBackend.ComputeInput
+        panel2 =
+            { computeQueries = [ "since:\"2 months ago\" repo:github\\.com/zulip/zulip$ content:output(^.*/.*\\ (.*/.*) -> $1) type:diff count:all @@@ https://sourcegraph.com/search?q=context:global+repo:github%5C.com/zulip/zulip%24+type:diff+file:$1&patternType=literal" ]
+            , experimentalOptions =
+                Just
+                    { dataPoints = Just 10
+                    , sortByCount = Just True
+                    , reverse = Nothing
+                    , excludeStopWords = Just True
+                    }
+            , editible = Just False
+            , selectedTab = Just "table"
+            }
+
         ( panelsModel, panelsCmd ) =
-            Panels.init PanelsMsg shared [ panel0, panel1 ]
+            Panels.init PanelsMsg shared [ panel0, panel1, panel2 ]
     in
     ( { panels = panelsModel }, panelsCmd )
 
@@ -93,6 +107,8 @@ view model =
                 , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 0 Compute.defaults)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "Commit message topics in last 3mo")
                 , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 1 { minHeight = Just 200 })
+                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Most modified files in last 2mo")
+                , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 2 Compute.defaults)
                 , E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
                 , Layout.howDoesThisWork
                 ]
