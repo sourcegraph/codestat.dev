@@ -392,7 +392,7 @@ table query data =
             , Border.widthEach { bottom = 1, top = 0, left = 0, right = 0 }
             ]
     in
-    E.el [ E.padding 100, E.centerX ]
+    E.el [ E.centerX ]
         (E.table [ E.width E.fill ]
             { data = data
             , columns =
