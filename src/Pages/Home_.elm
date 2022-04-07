@@ -101,6 +101,7 @@ view model =
                             ]
                         , statGroup "Golang"
                             [ ( "development", "/s/golang/dev" )
+                            , ( "net pkg", "/s/golang/net" )
                             ]
                         ]
                     , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
