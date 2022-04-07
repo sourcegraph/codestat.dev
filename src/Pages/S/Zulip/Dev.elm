@@ -52,7 +52,7 @@ init shared =
 
         panel1 : ComputeBackend.ComputeInput
         panel1 =
-            { computeQueries = [ "repo:github\\.com/zulip/zulip$ type:commit since:\"3 months ago\" count:10000 content:output((\\w+) -> $1) @@@ https://sourcegraph.com/search?q=context:global+repo:github%5C.com/zulip/zulip%24+type:commit+$1&patternType=regexp" ]
+            { computeQueries = [ "repo:github\\.com/zulip/zulip$ type:commit since:\"3 months ago\" count:10000 content:output((?i)(zulip|add|update|fixes|remove)|(\\w+) -> $2) @@@ https://sourcegraph.com/search?q=context:global+repo:github%5C.com/golang/go%24+type:commit+$1&patternType=regexp" ]
             , experimentalOptions =
                 Just
                     { dataPoints = Just 50
