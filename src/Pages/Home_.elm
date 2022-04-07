@@ -74,8 +74,7 @@ view model =
     , body =
         Layout.body
             [ E.column [ E.centerX ]
-                [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "(WORK IN PROGRESS, NOT DONE YET, please don't post me anywhere!)")
-                , E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Real time stats from 2 million open source repositories")
+                [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Real time stats from 2 million open source repositories")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "codestat.dev runs regex search queries over 2m+ open source repositories and performs"
                     , E.text " computation in real time, as thousands of results stream in to your browser!"
