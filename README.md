@@ -27,6 +27,19 @@ elm-spa server  # starts this app at http:/localhost:1234
 
 ## Adding a new dashboard
 
-It's pretty simple! Duplicate `S/Zulip.elm` (which corresponds to `/s/zulip`, be sure to put yours under a relevant URL under `/s/` - projects are `/s/project` while one-off stats are `/s/project/stat-name` under the project they're relevant to).
+First use the [explorer](https://codestat.dev/explorer) to find out what query + options you want first.
 
-Look in the file for `panel0` - this is where you can modify the panels that appear on the page, their queries, etc.
+**Ultra easy way**: Tweet/message @codestat_dev, we'll chuck it into a dedicated page for you :)
+
+**Slightly harder way**:
+
+Just duplicate an existing dashboard, e.g.:
+
+* `S/Golang/Net.elm`
+* `S/Zulip/Dev.elm`
+
+(the format should be `S/<Project>/<Dashboard name>`)
+
+Look for `panel0`, `panel1`, etc. in the file and the `view model` function - it's pretty simple, just copy+paste+modify as you need, the Elm compiler will tell you if anything is wrong & will reload the page live as you edit.
+
+Then just send your changes in a PR :)
