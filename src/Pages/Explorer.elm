@@ -14,8 +14,7 @@ import View exposing (View)
 
 
 type alias Model =
-    { explorer : Compute.Model
-    }
+    Compute.Model
 
 
 type Msg
@@ -66,29 +65,23 @@ page shared { query } =
 
 init : Shared.Model -> UrlParams -> ( Model, Cmd Msg )
 init shared urlParams =
-    let
-        ( subModel, subCmd ) =
-            Compute.init shared
-                |> Tuple.mapFirst
-                    (\model ->
-                        { model
-                            | query = Maybe.withDefault model.query urlParams.query
-                            , selectedTab = Maybe.withDefault model.selectedTab urlParams.tab
-                        }
-                    )
-    in
-    ( { explorer = subModel }, Cmd.map Explorer subCmd )
+    Compute.init shared
+        |> Tuple.mapBoth
+            (\model ->
+                { model
+                    | query = Maybe.withDefault model.query urlParams.query
+                    , selectedTab = Maybe.withDefault model.selectedTab urlParams.tab
+                }
+            )
+            (Cmd.map Explorer)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Explorer subMsg ->
-            let
-                ( subModel, subCmd ) =
-                    Compute.update subMsg model.explorer
-            in
-            ( { model | explorer = subModel }, Cmd.map Explorer subCmd )
+            Compute.update subMsg model
+                |> Tuple.mapSecond (Cmd.map Explorer)
 
 
 view : Model -> View Msg
@@ -98,7 +91,7 @@ view model =
         Layout.body
             [ E.column [ E.centerX, E.paddingXY 0 64 ]
                 [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Compute data explorer")
-                , E.el [ E.paddingXY 0 32, E.width E.fill ] (E.map Explorer (Compute.view Compute.defaults model.explorer))
+                , E.el [ E.paddingXY 0 32, E.width E.fill ] (E.map Explorer (Compute.view Compute.defaults model))
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] (E.text "How do I use this?")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Documentation is lacking right now, sorry! We're working on it. For now I suggest you check out "
@@ -112,4 +105,4 @@ view model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.map Explorer (Compute.subscriptions model.explorer)
+    Sub.map Explorer (Compute.subscriptions model)
