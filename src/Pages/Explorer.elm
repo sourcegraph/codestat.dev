@@ -12,13 +12,14 @@ import Url.Parser exposing (..)
 import View exposing (View)
 
 
+
 type alias Model =
-    { wordCloud : Compute.Model
+    { explorer : Compute.Model
     }
 
 
 type Msg
-    = WordCloudMsg Compute.Msg
+    = Explorer Compute.Msg
 
 
 page : Shared.Model -> Request -> Page.With Model Msg
@@ -37,18 +38,18 @@ init shared =
         ( subModel, subCmd ) =
             Compute.init shared
     in
-    ( { wordCloud = subModel }, Cmd.map WordCloudMsg subCmd )
+    ( { explorer = subModel }, Cmd.map Explorer subCmd )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        WordCloudMsg subMsg ->
+        Explorer subMsg ->
             let
                 ( subModel, subCmd ) =
-                    Compute.update subMsg model.wordCloud
+                    Compute.update subMsg model.explorer
             in
-            ( { model | wordCloud = subModel }, Cmd.map WordCloudMsg subCmd )
+            ( { model | explorer = subModel }, Cmd.map Explorer subCmd )
 
 
 view : Model -> View Msg
@@ -58,7 +59,7 @@ view model =
         Layout.body
             [ E.column [ E.centerX, E.paddingXY 0 64 ]
                 [ E.el [ Region.heading 1, Font.size 24 ] (E.text "Compute data explorer")
-                , E.el [ E.paddingXY 0 32, E.width E.fill ] (E.map WordCloudMsg (Compute.view Compute.defaults model.wordCloud))
+                , E.el [ E.paddingXY 0 32, E.width E.fill ] (E.map Explorer (Compute.view Compute.defaults model.explorer))
                 , E.el [ Region.heading 2, Font.size 20, E.paddingEach { top = 64, right = 0, bottom = 0, left = 0 } ] (E.text "How do I use this?")
                 , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
                     [ E.text "Documentation is lacking right now, sorry! We're working on it. For now I suggest you check out "
@@ -72,4 +73,4 @@ view model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.map WordCloudMsg (Compute.subscriptions model.wordCloud)
+    Sub.map Explorer (Compute.subscriptions model.explorer)
