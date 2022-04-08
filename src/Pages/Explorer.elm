@@ -1,6 +1,7 @@
 module Pages.Explorer exposing (Model, Msg, init, page, update, view)
 
-import Compute
+import Compute exposing (Tab(..))
+import Dict
 import Element as E
 import Element.Font as Font
 import Element.Region as Region
@@ -12,7 +13,6 @@ import Url.Parser exposing (..)
 import View exposing (View)
 
 
-
 type alias Model =
     { explorer : Compute.Model
     }
@@ -22,21 +22,60 @@ type Msg
     = Explorer Compute.Msg
 
 
+type alias UrlParams =
+    -- Values in the URL that may initialize query or tab
+    { query : Maybe String
+    , tab : Maybe Tab
+    }
+
+
+decodeUrlParams : Dict.Dict String String -> UrlParams
+decodeUrlParams params =
+    { query = Dict.get "q" params
+    , tab =
+        case Dict.get "t" params of
+            Just "c" ->
+                Just Chart
+
+            Just "t" ->
+                Just Table
+
+            Just "d" ->
+                Just Data
+
+            Just "n" ->
+                Just Number
+
+            Just "l" ->
+                Just LinkCloud
+
+            _ ->
+                Nothing
+    }
+
+
 page : Shared.Model -> Request -> Page.With Model Msg
-page shared _ =
+page shared { query } =
     Page.element
-        { init = init shared
+        { init = init shared (decodeUrlParams query)
         , update = update
         , view = view
         , subscriptions = subscriptions
         }
 
 
-init : Shared.Model -> ( Model, Cmd Msg )
-init shared =
+init : Shared.Model -> UrlParams -> ( Model, Cmd Msg )
+init shared urlParams =
     let
         ( subModel, subCmd ) =
             Compute.init shared
+                |> Tuple.mapFirst
+                    (\model ->
+                        { model
+                            | query = Maybe.withDefault model.query urlParams.query
+                            , selectedTab = Maybe.withDefault model.selectedTab urlParams.tab
+                        }
+                    )
     in
     ( { explorer = subModel }, Cmd.map Explorer subCmd )
 
