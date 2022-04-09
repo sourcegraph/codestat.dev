@@ -1,4 +1,4 @@
-module Compute exposing (Model, Msg, Settings, Tab(..), defaults, init, subscriptions, update, view)
+module Compute exposing (Model, Msg(..), Settings, Tab(..), defaults, init, subscriptions, update, view)
 
 import Chart as C
 import Chart.Attributes as CA

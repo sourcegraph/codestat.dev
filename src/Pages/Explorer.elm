@@ -1,6 +1,7 @@
 module Pages.Explorer exposing (Model, Msg, init, page, update, view)
 
-import Compute exposing (Tab(..))
+import Browser.Navigation as Navigation
+import Compute exposing (Msg(..), Tab(..))
 import Dict
 import Element as E
 import Element.Font as Font
@@ -9,6 +10,8 @@ import Layout
 import Page
 import Request exposing (Request)
 import Shared
+import Url
+import Url.Builder
 import Url.Parser exposing (..)
 import View exposing (View)
 
@@ -28,36 +31,11 @@ type alias UrlParams =
     }
 
 
-decodeUrlParams : Dict.Dict String String -> UrlParams
-decodeUrlParams params =
-    { query = Dict.get "q" params
-    , tab =
-        case Dict.get "t" params of
-            Just "c" ->
-                Just Chart
-
-            Just "t" ->
-                Just Table
-
-            Just "d" ->
-                Just Data
-
-            Just "n" ->
-                Just Number
-
-            Just "l" ->
-                Just LinkCloud
-
-            _ ->
-                Nothing
-    }
-
-
 page : Shared.Model -> Request -> Page.With Model Msg
-page shared { query } =
+page shared ({ query } as req) =
     Page.element
         { init = init shared (decodeUrlParams query)
-        , update = update
+        , update = update req
         , view = view
         , subscriptions = subscriptions
         }
@@ -76,12 +54,29 @@ init shared urlParams =
             (Cmd.map Explorer)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Explorer subMsg ->
-            Compute.update subMsg model
-                |> Tuple.mapSecond (Cmd.map Explorer)
+update : Request -> Msg -> Model -> ( Model, Cmd Msg )
+update req msg model =
+    let
+        ( computeModel, computeCmd ) =
+            case msg of
+                Explorer subMsg ->
+                    Compute.update subMsg model
+
+        explorerCmd =
+            -- Explorer page doesn't modify the model, just possibly a command (triggers URL update)
+            case msg of
+                Explorer subMsg ->
+                    case subMsg of
+                        OnTabSelected tab ->
+                            Navigation.pushUrl req.key (encodeNewUrl model.query tab)
+
+                        OnDebounce ->
+                            Navigation.pushUrl req.key (encodeNewUrl model.query model.selectedTab)
+
+                        _ ->
+                            Cmd.none
+    in
+    ( computeModel, Cmd.map Explorer (Cmd.batch [ computeCmd, explorerCmd ]) )
 
 
 view : Model -> View Msg
@@ -106,3 +101,59 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.map Explorer (Compute.subscriptions model)
+
+
+encodeNewUrl query selectedTab =
+    Url.Builder.relative
+        [ "explorer" ]
+        [ Url.Builder.string "q" query
+        , Url.Builder.string "t" (tabToString selectedTab)
+        ]
+
+
+decodeUrlParams : Dict.Dict String String -> UrlParams
+decodeUrlParams params =
+    { query = Dict.get "q" params
+    , tab = Maybe.andThen tabFromString (Dict.get "t" params)
+    }
+
+
+tabFromString : String -> Maybe Tab
+tabFromString s =
+    case s of
+        "chart" ->
+            Just Chart
+
+        "table" ->
+            Just Table
+
+        "data" ->
+            Just Data
+
+        "number" ->
+            Just Number
+
+        "linkCloud" ->
+            Just LinkCloud
+
+        _ ->
+            Nothing
+
+
+tabToString : Tab -> String
+tabToString tab =
+    case tab of
+        Chart ->
+            "chart"
+
+        Table ->
+            "table"
+
+        Data ->
+            "data"
+
+        Number ->
+            "number"
+
+        LinkCloud ->
+            "linkCloud"
