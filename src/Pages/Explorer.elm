@@ -68,10 +68,10 @@ update req msg model =
                 Explorer subMsg ->
                     case subMsg of
                         OnTabSelected tab ->
-                            Navigation.pushUrl req.key (encodeNewUrl model.query tab)
+                            Navigation.replaceUrl req.key (encodeNewUrl model.query tab)
 
                         OnDebounce ->
-                            Navigation.pushUrl req.key (encodeNewUrl model.query model.selectedTab)
+                            Navigation.replaceUrl req.key (encodeNewUrl model.query model.selectedTab)
 
                         _ ->
                             Cmd.none
