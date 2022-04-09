@@ -1,7 +1,7 @@
 module Pages.Explorer exposing (Model, Msg, init, page, update, view)
 
 import Browser.Navigation as Navigation
-import Compute exposing (Msg(..), Tab(..))
+import Compute exposing (DataFilterMsg(..), Msg(..), Tab(..))
 import Dict
 import Element as E
 import Element.Font as Font
@@ -10,7 +10,6 @@ import Layout
 import Page
 import Request exposing (Request)
 import Shared
-import Url
 import Url.Builder
 import Url.Parser exposing (..)
 import View exposing (View)
@@ -28,6 +27,7 @@ type alias UrlParams =
     -- Values in the URL that may initialize query or tab
     { query : Maybe String
     , tab : Maybe Tab
+    , dataPoints : Maybe Int
     }
 
 
@@ -49,6 +49,18 @@ init shared urlParams =
                 { model
                     | query = Maybe.withDefault model.query urlParams.query
                     , selectedTab = Maybe.withDefault model.selectedTab urlParams.tab
+                    , dataFilter =
+                        Maybe.withDefault model.dataFilter
+                            (urlParams.dataPoints
+                                |> Maybe.andThen
+                                    (\dataPoints ->
+                                        let
+                                            dataFilter =
+                                                model.dataFilter
+                                        in
+                                        Just { dataFilter | dataPoints = dataPoints }
+                                    )
+                            )
                 }
             )
             (Cmd.map Explorer)
@@ -64,14 +76,18 @@ update req msg model =
 
         explorerCmd =
             -- Explorer page doesn't modify the model, just possibly a command (triggers URL update)
+            -- Note: we assume model is up to date via `computeModel` and don't use message values.
             case msg of
                 Explorer subMsg ->
                     case subMsg of
-                        OnTabSelected tab ->
-                            Navigation.replaceUrl req.key (encodeNewUrl model.query tab)
+                        OnTabSelected _ ->
+                            Navigation.replaceUrl req.key (encodeNewUrl computeModel)
 
                         OnDebounce ->
-                            Navigation.replaceUrl req.key (encodeNewUrl model.query model.selectedTab)
+                            Navigation.replaceUrl req.key (encodeNewUrl computeModel)
+
+                        OnDataFilter (OnDataPoints _) ->
+                            Navigation.replaceUrl req.key (encodeNewUrl computeModel)
 
                         _ ->
                             Cmd.none
@@ -103,18 +119,20 @@ subscriptions model =
     Sub.map Explorer (Compute.subscriptions model)
 
 
-encodeNewUrl query selectedTab =
+encodeNewUrl { query, selectedTab, dataFilter } =
     Url.Builder.relative
         [ "explorer" ]
         [ Url.Builder.string "q" query
         , Url.Builder.string "t" (tabToString selectedTab)
+        , Url.Builder.string "dp" (String.fromInt dataFilter.dataPoints)
         ]
 
 
 decodeUrlParams : Dict.Dict String String -> UrlParams
 decodeUrlParams params =
     { query = Dict.get "q" params
-    , tab = Maybe.andThen tabFromString (Dict.get "t" params)
+    , tab = Dict.get "t" params |> Maybe.andThen tabFromString
+    , dataPoints = Dict.get "dp" params |> Maybe.andThen String.toInt
     }
 
 
