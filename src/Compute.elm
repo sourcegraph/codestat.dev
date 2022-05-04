@@ -488,7 +488,7 @@ linkCloudView query data =
         ( _, queryUrl ) =
             parseLinkQuery query
     in
-    E.paragraph [ F.size 18, E.spacing 8 ]
+    E.wrappedRow [ F.size 18, E.spacing 4 ]
         (List.map
             (\value ->
                 let
