@@ -97,7 +97,7 @@ initPanel { description, query, selectedTab, dataPoints, sortByCount, reverse, e
         , debounce = 0
         , resultCount = 0
         , resultsMap = Dict.empty
-        , serverless = True
+        , serverless = False
         }
     }
 
@@ -118,70 +118,12 @@ update (Update i m) model =
         |> Maybe.withDefault ( model, Cmd.none )
 
 
-
-{--
-
-type alias Model =
-    { panels : Panels.Model
-    }
-
-
-type Msg
-    = PanelsMsg Panels.Msg
-
-
-page : Shared.Model -> Request -> Page.With Model Msg
-page shared _ =
-    Page.element
-        { init = init shared
-        , update = update
-        , view = view
-        , subscriptions = subscriptions
-        }
-
-
-init : Shared.Model -> ( Model, Cmd Msg )
-init shared =
-    let
-        panel0 : ComputeBackend.ComputeInput
-        panel0 =
-            { computeQueries = [ "context:@r/go-100-gh lang:go content:output((type \\w* interface) -> $1 (group by) $repo) count:all" ]
-            , experimentalOptions =
-                Just
-                    { dataPoints = Just 10
-                    , sortByCount = Just True
-                    , reverse = Nothing
-                    , excludeStopWords = Nothing
-                    }
-            , editible = Just False
-            , selectedTab = Just "chart"
-            }
-
-        ( panelsModel, panelsCmd ) =
-            Panels.init PanelsMsg shared [ panel0 ]
-    in
-    ( { panels = panelsModel }, panelsCmd )
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        PanelsMsg subMsg ->
-            let
-                ( subModel, subCmd ) =
-                    Panels.update PanelsMsg subMsg model.panels
-            in
-            ( { model | panels = subModel }, subCmd )
-
---}
-
-
 view : Model -> View Msg
 view model =
     { title = "codestat.dev"
     , body =
         Layout.body
-            [ E.column [ E.width E.fill, E.spacingXY 0 32, E.centerX ]
+            [ E.column [ E.width (E.fill |> E.maximum 800), E.spacingXY 0 32, E.centerX ]
                 [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 } ] (E.text "Real time stats from 2 million open source repositories")
                 , exampleView model
                 , linkedPagesView
