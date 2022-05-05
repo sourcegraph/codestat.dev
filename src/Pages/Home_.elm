@@ -101,9 +101,10 @@ view model =
                         , statGroup "Golang"
                             [ ( "development", "/s/golang/dev" )
                             , ( "net pkg", "/s/golang/net" )
+                            , ( "conventions", "/s/golang/conventions" )
                             ]
                         , statGroup "The Archives"
-                            [ ( "Microsoft 3D Movie Maker (1995)", "/s/the-archives/microsoft-movie-maker" )
+                            [ ( "Microsoft 3D Movie Maker (1995)    ", "/s/the-archives/microsoft-movie-maker" )
                             ]
                         ]
                     , E.paragraph [ E.paddingEach { top = 32, right = 0, bottom = 0, left = 0 }, E.width (E.fill |> E.maximum 800) ]
