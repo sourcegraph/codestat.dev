@@ -14,6 +14,14 @@ import Url.Parser exposing (..)
 import View exposing (View)
 
 
+title =
+    "golang/conventions - codestat.dev"
+
+
+header =
+    "Conventions in Go code"
+
+
 data =
     [ { description = "Does Go code prefer explicitly ignoring unused return values for `Fprintf`?"
       , query = "context:@r/go-100-gh lang:go content:output((_, _ = )?(fmt.Fprintf) -> $1 $2) count:all"
@@ -119,7 +127,7 @@ update (Update i m) model =
 
 view : Model -> View Msg
 view model =
-    { title = "golang/conventions - codestat.dev"
+    { title = title
     , body =
         Layout.body
             [ E.column [ E.centerX ]
@@ -131,7 +139,7 @@ view model =
 headerView : E.Element Msg
 headerView =
     E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 32, left = 0 } ]
-        (E.text "Conventions in Go code")
+        (E.text header)
 
 
 dataView : Model -> List (E.Element Msg)

@@ -14,6 +14,14 @@ import Url.Parser exposing (..)
 import View exposing (View)
 
 
+title =
+    "zulip/dev - codestat.dev"
+
+
+header =
+    "Zulip development stats"
+
+
 data =
     [ { description = "Top committers to github.com/zulip/zulip in last 6mo"
       , query = "repo:github\\.com/zulip/zulip$ content:output((.|\n)* -> $author) type:commit since:\"6 months ago\" count:all"
@@ -137,7 +145,7 @@ update (Update i m) model =
 
 view : Model -> View Msg
 view model =
-    { title = "zulip/dev - codestat.dev"
+    { title = title
     , body =
         Layout.body
             [ E.column [ E.centerX ]
@@ -149,7 +157,7 @@ view model =
 headerView : E.Element Msg
 headerView =
     E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 32, left = 0 } ]
-        (E.text "Zulip development stats")
+        (E.text header)
 
 
 dataView : Model -> List (E.Element Msg)

@@ -1,26 +1,73 @@
 module Pages.S.Golang.Net exposing (Model, Msg, init, page, update, view)
 
-import Compute
-import ComputeBackend
+import Compute exposing (Tab(..))
+import Dict exposing (Dict)
 import Element as E
 import Element.Font as Font
 import Element.Region as Region
 import Layout
 import Page
-import Panels
 import Request exposing (Request)
 import Shared
+import Task
 import Url.Parser exposing (..)
 import View exposing (View)
 
 
-type alias Model =
-    { panels : Panels.Model
+title =
+    "golang/net - codestat.dev"
+
+
+header =
+    "Golang net package stats"
+
+
+data =
+    [ { description = "Most used net.Symbol across all Go repositories"
+      , query = "lang:go content:output((net\\.[A-Z]\\w+) -> $1) count:all"
+      , dataPoints = 20
+      , sortByCount = True
+      , reverse = False
+      , excludeStopWords = False
+      , selectedTab = Chart
+      , editible = False
+      }
+    , { description = "Most used http.Symbol across all Go repositories"
+      , query = "lang:go content:output((http\\.[A-Z]\\w+) -> $1) count:all"
+      , dataPoints = 20
+      , sortByCount = True
+      , reverse = False
+      , excludeStopWords = False
+      , selectedTab = Chart
+      , editible = False
+      }
+    ]
+
+
+type alias Panel =
+    { description : String
+    , inputs : Compute.Model
     }
 
 
+type alias Model =
+    Dict Int Panel
+
+
 type Msg
-    = PanelsMsg Panels.Msg
+    = Update Int Compute.Msg
+
+
+type alias PanelInputs =
+    { description : String
+    , query : String
+    , selectedTab : Tab
+    , dataPoints : Int
+    , sortByCount : Bool
+    , reverse : Bool
+    , excludeStopWords : Bool
+    , editible : Bool
+    }
 
 
 page : Shared.Model -> Request -> Page.With Model Msg
@@ -34,71 +81,98 @@ page shared _ =
 
 
 init : Shared.Model -> ( Model, Cmd Msg )
-init shared =
+init _ =
     let
-        panel0 : ComputeBackend.ComputeInput
-        panel0 =
-            { computeQueries = [ "lang:go content:output((net\\.[A-Z]\\w+) -> $1) count:all" ]
-            , experimentalOptions =
-                Just
-                    { dataPoints = Just 20
-                    , sortByCount = Just True
-                    , reverse = Nothing
-                    , excludeStopWords = Nothing
-                    }
-            , editible = Just False
-            , selectedTab = Just "chart"
-            }
-
-        panel1 : ComputeBackend.ComputeInput
-        panel1 =
-            { computeQueries = [ "lang:go content:output((http\\.[A-Z]\\w+) -> $1) count:all" ]
-            , experimentalOptions =
-                Just
-                    { dataPoints = Just 20
-                    , sortByCount = Just True
-                    , reverse = Nothing
-                    , excludeStopWords = Nothing
-                    }
-            , editible = Just False
-            , selectedTab = Just "chart"
-            }
-
-        ( panelsModel, panelsCmd ) =
-            Panels.init PanelsMsg shared [ panel0, panel1 ]
+        model =
+            data
+                |> List.map initPanel
+                |> List.indexedMap Tuple.pair
+                |> Dict.fromList
     in
-    ( { panels = panelsModel }, panelsCmd )
+    ( model
+    , Dict.keys model
+        |> List.map (\i -> Task.perform identity (Task.succeed (Update i Compute.RunCompute)))
+        |> Cmd.batch
+    )
+
+
+initPanel : PanelInputs -> Panel
+initPanel { description, query, selectedTab, dataPoints, sortByCount, reverse, excludeStopWords, editible } =
+    { description = description
+    , inputs =
+        { sourcegraphURL = "https://sourcegraph.com"
+        , query = query
+        , dataFilter =
+            { dataPoints = dataPoints
+            , sortByCount = sortByCount
+            , reverse = reverse
+            , excludeStopWords = excludeStopWords
+            }
+        , selectedTab = selectedTab
+        , editible = editible
+        , debounce = 0
+        , resultCount = 0
+        , resultsMap = Dict.empty
+        , serverless = False
+        }
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        PanelsMsg subMsg ->
-            let
-                ( subModel, subCmd ) =
-                    Panels.update PanelsMsg subMsg model.panels
-            in
-            ( { model | panels = subModel }, subCmd )
+update (Update i m) model =
+    (Dict.get i model
+        |> Maybe.map (Compute.update m << .inputs)
+        |> Maybe.map
+            (\( newInputs, cmd ) ->
+                ( Dict.update i
+                    (Maybe.map (\v -> { v | inputs = newInputs }))
+                    model
+                , Cmd.map (Update i) cmd
+                )
+            )
+    )
+        |> Maybe.withDefault ( model, Cmd.none )
 
 
 view : Model -> View Msg
 view model =
-    { title = "golang/net - codestat.dev"
+    { title = title
     , body =
         Layout.body
             [ E.column [ E.centerX ]
-                [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 32, left = 0 } ]
-                    (E.text "Golang net package stats")
-                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Most used net.Symbol across all Go repositories")
-                , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 0 Compute.defaults)
-                , E.el [ Region.heading 2, Font.size 20 ] (E.text "Most used http.Symbol across all Go repositories")
-                , E.el [ E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 }, E.width E.fill ] (Panels.render PanelsMsg model.panels 1 { minHeight = Just 500 })
-                , Layout.howDoesThisWork
-                ]
+                ([ headerView ] ++ dataView model ++ [ footerView ])
             ]
     }
 
 
+headerView : E.Element Msg
+headerView =
+    E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 32, left = 0 } ]
+        (E.text header)
+
+
+dataView : Model -> List (E.Element Msg)
+dataView model =
+    Dict.toList model
+        |> List.map
+            (\( i, { description, inputs } ) ->
+                E.column [ E.width E.fill, E.paddingEach { top = 0, right = 0, bottom = 32, left = 0 } ]
+                    [ E.el [ Region.heading 2, Font.size 20 ] (E.text description)
+                    , E.map (Update i) (Compute.view Compute.defaults inputs)
+                    ]
+            )
+
+
+footerView : E.Element Msg
+footerView =
+    E.column []
+        [ E.el [ Region.heading 2, Font.size 20 ] (E.text "How does this work?")
+        , Layout.howDoesThisWork
+        ]
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Panels.subscriptions PanelsMsg model.panels
+    Dict.toList model
+        |> List.map (\( i, { inputs } ) -> Sub.map (Update i) (Compute.subscriptions inputs))
+        |> Sub.batch

@@ -14,6 +14,14 @@ import Url.Parser exposing (..)
 import View exposing (View)
 
 
+title =
+    "the-archives/microsoft-movie-maker - codestat.dev"
+
+
+header =
+    "Microsoft 3D Movie Maker (1995)"
+
+
 data =
     [ { description = "Language breakdown (number of files)"
       , query = "repo:^github\\.com/microsoft/Microsoft-3D-Movie-Maker$ content:output(.* -> $lang) type:path count:all"
@@ -158,7 +166,7 @@ update (Update i m) model =
 
 view : Model -> View Msg
 view model =
-    { title = "the-archives/microsoft-movie-maker - codestat.dev"
+    { title = title
     , body =
         Layout.body
             [ E.column [ E.centerX, E.spacingXY 0 70 ]
@@ -171,7 +179,7 @@ headerView : E.Element Msg
 headerView =
     E.column [ E.width E.fill, E.paddingXY 0 50 ]
         [ E.el [ Region.heading 1, Font.size 24, E.paddingEach { top = 64, right = 0, bottom = 32, left = 0 } ]
-            (E.text "Microsoft 3D Movie Maker (1995)")
+            (E.text header)
         , E.newTabLink [ Font.size 20 ]
             { url = "https://twitter.com/shanselman/status/1521698902579159040"
             , label = E.el [ Font.color (E.rgb255 0x12 0x93 0xD8) ] (E.text "Open source release announced on May 3, 2022 ↗")
