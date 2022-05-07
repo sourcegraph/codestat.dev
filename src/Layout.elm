@@ -122,7 +122,7 @@ howDoesThisWork =
             , E.text " to perform regex searches over the code in 2m+ open source repositories"
             , E.text ", and then perform computation over the result set (you can explore yourself using the "
             , E.link [] { url = "/explorer", label = E.text "compute data explorer" }
-            , E.text ") We then use the "
+            , E.text "). We then use the "
             , E.link [] { url = "https://elm-lang.org", label = E.text "Elm language" }
             , E.text " to visualize the results."
             ]

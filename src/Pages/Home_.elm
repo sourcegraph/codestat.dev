@@ -182,6 +182,9 @@ linkedPagesView =
                     , ( "net pkg", "/s/golang/net" )
                     , ( "conventions", "/s/golang/conventions" )
                     ]
+                , statGroup "OCaml"
+                    [ ( "ecosystem", "/s/ocaml/ecosystem" )
+                    ]
                 , statGroup "The Archives"
                     [ ( "Microsoft 3D Movie Maker (1995)    ", "/s/the-archives/microsoft-movie-maker" )
                     ]
